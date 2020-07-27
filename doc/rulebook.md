@@ -28,6 +28,7 @@ TODO: Mainly D100
 ## Players
 
 TODO: Characteristics, skills and abilities. 
+(Throwing, Catching, Wrestling, Hitting, Kicking, Screening, etc.),
+(Strength, Agility, Speed, Aggressiveness, Endurance, Fatigue) 
 
 TODO: 4 goal keepers, 3 fullbacks, 5 halfbacks, 15 forwards.
-

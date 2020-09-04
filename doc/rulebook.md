@@ -15,7 +15,7 @@ TODO: Game last 50 turns (50 minutes).
 
 ### Scoring
 
-TODO: 1 point for goal, � to the opponent throws ball above the goal net.
+TODO: 1 point for goal, 1/2 to the opponent throws ball above the goal net.
 
 ### Board
 

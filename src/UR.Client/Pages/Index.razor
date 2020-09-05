@@ -1,7 +1,16 @@
 ﻿@page "/"
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
-<h1>Hello, world!</h1>
+<h1>Unnecessary Roughness</h1>
 
-Welcome to your new app.
+UR is based on historical football game called <a href="https://en.m.wikipedia.org/wiki/Calcio_Fiorentino" target="_blank" rel="noopener noreferrer">Calcio Storico</a>.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<button class="btn btn-primary" @onclick="NavigateToGame">Play</button>
+
+@code {
+    private void NavigateToGame()
+    {
+        var random = new Random();
+        NavigationManager.NavigateTo($"/play/{random.Next(1, 1000)}");
+    }
+}

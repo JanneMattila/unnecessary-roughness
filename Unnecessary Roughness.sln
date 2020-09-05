@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "release", "release", "{F731
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{AFDA2978-8523-47EB-AC59-501B28ADAFAF}"
 	ProjectSection(SolutionItems) = preProject
+		doc\board.drawio.svg = doc\board.drawio.svg
+		doc\misc.md = doc\misc.md
 		doc\rulebook.md = doc\rulebook.md
 	EndProjectSection
 EndProject
@@ -30,7 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{0F3D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{639178D8-17FC-41F3-B05E-CCB27B68F520}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UR.Tests", "test\unit\UR.Tests\UR.Tests.csproj", "{2CE0DBF9-F096-4890-AA69-F07CF761D33D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UR.Tests", "test\unit\UR.Tests\UR.Tests.csproj", "{2CE0DBF9-F096-4890-AA69-F07CF761D33D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UR", "src\UR\UR.csproj", "{89D4FBA4-40DE-40A2-82F3-A6E083529ABD}"
 EndProject

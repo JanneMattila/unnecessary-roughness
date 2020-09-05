@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UR.Client\UR.Client.csproj" />
     <ProjectReference Include="..\UR\UR.csproj" />
   </ItemGroup>
 

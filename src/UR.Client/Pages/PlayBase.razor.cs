@@ -20,6 +20,7 @@ namespace UR.Client.Pages
         protected static GameEngine _gameEngine;
         protected static Action _stateHasChanged;
         protected static IJSRuntime JSRuntime2;
+        protected bool _loaded = false;
         protected static ElementReference _canvas;
 
         protected override async Task OnInitializedAsync()
@@ -74,6 +75,22 @@ namespace UR.Client.Pages
                         _stateHasChanged();
                     }
                 };
+            }
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+
+            if (!_loaded)
+            {
+                _loaded = true;
+                await _gameEngine.LoadGameEventsAsync();
+
+                await JSRuntime.InvokeAsync<object>("initializeGameview", _canvas);
+                await JSRuntime.InvokeAsync<object>("drawCanvas", _gameEngine.Game);
+
+                _stateHasChanged();
             }
         }
 

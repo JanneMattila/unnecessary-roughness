@@ -291,17 +291,31 @@ function drawCanvas(game) {
     _game = game;
     // TODO: Analyze that do we get a lot of these draw commands.
     //console.log(_game);
-    if (_context == null) {
+    if (_context === null) {
         return;
     }
     _context.save();
     _context.clearRect(0, 0, _canvasElement.width, _canvasElement.height);
+    var width = 25;
+    var height = 50;
+    for (var x = 0; x < width; x++) {
+        // North-south lines
+        _context.beginPath();
+        _context.moveTo(x * _FLOOR_SIZE, _FLOOR_SIZE);
+        _context.lineTo(x * _FLOOR_SIZE, height * _FLOOR_SIZE);
+        _context.stroke();
+    }
+    for (var y = 0; y < height; y++) {
+        // East-West lines
+        _context.beginPath();
+        _context.moveTo(0, y * _FLOOR_SIZE);
+        _context.lineTo(width * _FLOOR_SIZE, y * _FLOOR_SIZE);
+        _context.stroke();
+    }
     if (_imagesLoaded === _imagesToLoad) {
         //console.log("Draw board");
-        for (var x = 0; x < 15; x++) {
-            for (var y = 0; y < 26; y++) {
-                var index = y === 0 || y === 25 ? _IMAGE_END_ZONE : _IMAGE_FLOOR_LIGHT;
-                _context.drawImage(_images[index], x * _FLOOR_SIZE, y * _FLOOR_SIZE);
+        for (var x = 0; x < width; x++) {
+            for (var y = 0; y < height; y++) {
                 var availableMovementSelection = false;
                 var availableExtraMovementSelection = false;
                 var selectedMovementSelection = false;
@@ -355,18 +369,6 @@ function drawCanvas(game) {
                 }
             }
         }
-        _context.beginPath();
-        _context.moveTo(4 * _FLOOR_SIZE, _FLOOR_SIZE);
-        _context.lineTo(4 * _FLOOR_SIZE, 25 * _FLOOR_SIZE);
-        _context.stroke();
-        _context.beginPath();
-        _context.moveTo(11 * _FLOOR_SIZE, _FLOOR_SIZE);
-        _context.lineTo(11 * _FLOOR_SIZE, 25 * _FLOOR_SIZE);
-        _context.stroke();
-        _context.beginPath();
-        _context.moveTo(0, 13 * _FLOOR_SIZE);
-        _context.lineTo(15 * _FLOOR_SIZE, 13 * _FLOOR_SIZE);
-        _context.stroke();
         var selectedPlayerX = -1, selectedPlayerY = -1;
         var ballInPlayersHands = false;
         if (game.selectedPlayer != null) {

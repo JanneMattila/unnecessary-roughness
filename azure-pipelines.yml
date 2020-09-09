@@ -11,7 +11,7 @@ stages:
   jobs:
   - job: Build
     pool:
-      vmImage: ubuntu-16.04
+      vmImage: ubuntu-18.04
     steps:
     - task: Docker@2
       inputs:
@@ -19,6 +19,7 @@ stages:
         repository: $(repository)
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
+        buildContext:
         tags: |
           $(Build.BuildNumber)
           latest    

@@ -9,6 +9,16 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
 
+WORKDIR /node
+ENV NODE_VERSION 12.18.3
+RUN apt-get update -qq && \
+    apt-get dist-upgrade --no-install-recommends -y && \
+    apt-get install -y --no-install-recommends xz-utils
+
+RUN curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz"
+RUN tar -xf "/node/node-v$NODE_VERSION-linux-x64.tar.xz"
+ENV PATH=$PATH:/node/node-v$NODE_VERSION-linux-x64/bin
+
 # Cache nuget restore
 COPY ["src/UR.Server/UR.Server.csproj", "src/UR.Server/"]
 COPY ["src/UR.Client/UR.Client.csproj", "src/UR.Client/"]

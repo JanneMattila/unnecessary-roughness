@@ -36,8 +36,17 @@ namespace UR
         public async Task LoadGameEventsAsync()
         {
             _gameState = GameState.Initialization;
+            var events = new List<Event>();
 
-            var events = await _eventStore.GetEventsAsync(_game.ID);
+            try
+            {
+                events = await _eventStore.GetEventsAsync(_game.ID);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
             var createGameEvent = false;
             if (!events.Any())
             {

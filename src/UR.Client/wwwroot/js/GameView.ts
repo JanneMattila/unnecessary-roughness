@@ -10,7 +10,7 @@ const _IMAGE_BALL_ANIMATION = 4;
 
 const _IMAGE_PLAYER1 = 5;
 
-const _FLOOR_SIZE = 60;
+const _FLOOR_SIZE = 30;
 
 function loadImages() {
     const theme = "basic";
@@ -374,7 +374,7 @@ function drawCanvas(game: any) {
     const width = 25;
     const height = 50;
 
-    for (let x = 0; x < width; x++) {
+    for (let x = 0; x <= width; x++) {
         // North-south lines
         _context.beginPath();
         _context.moveTo(x * _FLOOR_SIZE, _FLOOR_SIZE);
@@ -382,7 +382,7 @@ function drawCanvas(game: any) {
         _context.stroke();
     }
 
-    for (let y = 0; y < height; y++) {
+    for (let y = 0; y <= height; y++) {
         // East-West lines
         _context.beginPath();
         _context.moveTo(0, y * _FLOOR_SIZE);

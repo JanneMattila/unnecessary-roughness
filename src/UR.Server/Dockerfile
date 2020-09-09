@@ -7,7 +7,6 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
-WORKDIR /src
 
 WORKDIR /node
 ENV NODE_VERSION 12.18.3
@@ -20,6 +19,7 @@ RUN tar -xf "/node/node-v$NODE_VERSION-linux-x64.tar.xz"
 ENV PATH=$PATH:/node/node-v$NODE_VERSION-linux-x64/bin
 
 # Cache nuget restore
+WORKDIR /src
 COPY ["src/UR.Server/UR.Server.csproj", "src/UR.Server/"]
 COPY ["src/UR.Client/UR.Client.csproj", "src/UR.Client/"]
 COPY ["src/UR/UR.csproj", "src/UR/"]

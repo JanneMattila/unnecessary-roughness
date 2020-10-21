@@ -116,5 +116,13 @@ namespace UR.Client.Pages
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
+        [JSInvokable]
+        public static async void CanvasClickReceived(int x, int y)
+        {
+            await Task.CompletedTask;
+            //await _gameEngine.CanvasClickAsync(x, y);
+            _stateHasChanged();
+        }
     }
 }

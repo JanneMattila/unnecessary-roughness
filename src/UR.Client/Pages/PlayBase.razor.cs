@@ -124,5 +124,15 @@ namespace UR.Client.Pages
             //await _gameEngine.CanvasClickAsync(x, y);
             _stateHasChanged();
         }
+
+        [JSInvokable]
+        public static async void CanvasKeyUpReceived(int keyCode)
+        {
+            await Task.CompletedTask;
+            //_gameStateEngine.CanvasKeyPress(keyCode);
+            //await JSRuntime2.InvokeAsync<object>("drawCanvas", _gameStateEngine.Game);
+            //_debug = $"{keyCode}";
+            _stateHasChanged();
+        }
     }
 }

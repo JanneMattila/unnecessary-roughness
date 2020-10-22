@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <BlazorLinkerDescriptor Include="LinkerConfig.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\UR\UR.csproj" />
   </ItemGroup>
 

@@ -28,11 +28,11 @@ RUN dotnet restore "src/UR.Server/UR.Server.csproj"
 # Copy sources and compile
 COPY . .
 WORKDIR "/src/src/UR.Server"
-RUN dotnet build "UR.Server.csproj" -c Release -o /app/build
+RUN dotnet build "UR.Server.csproj" -c Debug -o /app/build
 
 # 2. Release image
 FROM build AS publish
-RUN dotnet publish "UR.Server.csproj" -c Release -o /app/publish
+RUN dotnet publish "UR.Server.csproj" -c Debug -o /app/publish
 
 FROM base AS final
 WORKDIR /app

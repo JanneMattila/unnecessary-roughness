@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 namespace UR.Events
 {
     [XmlInclude(typeof(DiceEvent))]
+    [XmlInclude(typeof(GameDataEvent))]
     public class Event
     {
         public Guid ID { get; set; }
@@ -14,6 +15,10 @@ namespace UR.Events
 
         private static readonly XmlSerializer s_serializer = new XmlSerializer(typeof(Event));
         private static readonly XmlSerializer s_serializerList = new XmlSerializer(typeof(List<Event>));
+
+        public Event()
+        {
+        }
 
         public string ToXml()
         {

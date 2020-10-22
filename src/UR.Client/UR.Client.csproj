@@ -20,6 +20,10 @@
     </PackageReference>
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0-rc.2.20475.5" />
   </ItemGroup>
+  
+  <PropertyGroup>
+    <BlazorWebAssemblyEnableLinking>false</BlazorWebAssemblyEnableLinking>
+  </PropertyGroup>
 
   <ItemGroup>
     <BlazorLinkerDescriptor Include="LinkerConfig.xml" />

@@ -24,6 +24,8 @@ namespace UR
         public Action<Game> ExecuteDraw;
         public Action<string, bool> ShowElement;
         public Action<string> HideElement;
+        
+        internal int ShortestPathNodeScanCount { get; set; }
 
         public GameEngine(IBrowserLogger logger, Game game, IRandomizer randomizer, IEventStore eventStore)
         {
@@ -81,6 +83,49 @@ namespace UR
         public async Task ExecuteEventAsync(Event e)
         {
             await Task.CompletedTask;
+        }
+
+        private void ShortestPath(ShortestPathNode scanPosition, int[] board, List<ShortestPathNode> previousPositions, List<ShortestPathNode> newPositions, int x, int y, int movement, List<BoardPosition> availableMoves, List<BoardPosition> availableExtraMoves)
+        {
+            if (scanPosition == null)
+            {
+                foreach (var existingPosition in previousPositions)
+                {
+                    var p = existingPosition.Position;
+                    ShortestPath(existingPosition, board, previousPositions, newPositions, p.X - 1, p.Y, movement - 1, availableMoves, availableExtraMoves);
+                    ShortestPath(existingPosition, board, previousPositions, newPositions, p.X + 1, p.Y, movement - 1, availableMoves, availableExtraMoves);
+                    ShortestPath(existingPosition, board, previousPositions, newPositions, p.X, p.Y + 1, movement - 1, availableMoves, availableExtraMoves);
+                    ShortestPath(existingPosition, board, previousPositions, newPositions, p.X - 1, p.Y + 1, movement - 1, availableMoves, availableExtraMoves);
+                    ShortestPath(existingPosition, board, previousPositions, newPositions, p.X, p.Y - 1, movement - 1, availableMoves, availableExtraMoves);
+                    ShortestPath(existingPosition, board, previousPositions, newPositions, p.X - 1, p.Y - 1, movement - 1, availableMoves, availableExtraMoves);
+                    ShortestPath(existingPosition, board, previousPositions, newPositions, p.X - 1, p.Y + 1, movement - 1, availableMoves, availableExtraMoves);
+                    ShortestPath(existingPosition, board, previousPositions, newPositions, p.X + 1, p.Y + 1, movement - 1, availableMoves, availableExtraMoves);
+                    ShortestPath(existingPosition, board, previousPositions, newPositions, p.X + 1, p.Y - 1, movement - 1, availableMoves, availableExtraMoves);
+                }
+
+                return;
+            }
+
+            var index = x + y * GameBoard.BoardWidth;
+            var distance = scanPosition.Path.Count + 1;
+            if (movement <= 0 || x < 0 || x >= GameBoard.BoardWidth || y < 0 || y >= GameBoard.BoardHeight ||
+                board[index] == -1 || board[index] < distance)
+            {
+                // Outside board or already occupied or this move has already been placed.
+                return;
+            }
+
+            ShortestPathNodeScanCount++;
+            board[index] = distance;
+
+            var position = new BoardPosition() { X = x, Y = y };
+            var path = scanPosition.Path.ToList();
+            path.Add(position);
+            newPositions.Add(new ShortestPathNode()
+            {
+                Position = position,
+                Path = path
+            });
         }
     }
 }

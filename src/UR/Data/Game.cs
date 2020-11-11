@@ -14,7 +14,7 @@ namespace UR.Data
 
         public Ball Ball { get; set; }
 
-        public Player SelectedPlayer { get; set; }
+        public Player? SelectedPlayer { get; set; }
 
         public List<BoardPosition> AvailableMoves { get; set; }
 
@@ -24,6 +24,7 @@ namespace UR.Data
 
         public Game()
         {
+            ID = string.Empty;
             HomeTeam = new Team();
             VisitorTeam = new Team();
             Ball = new Ball();

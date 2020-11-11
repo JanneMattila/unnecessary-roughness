@@ -5,7 +5,7 @@ var _IMAGE_END_ZONE = 0;
 var _IMAGE_FLOOR_LIGHT = 2;
 var _IMAGE_BALL = 3;
 var _IMAGE_BALL_ANIMATION = 4;
-var _IMAGE_PLAYER1 = 5;
+var _IMAGE_PLAYER1 = 0;
 var _FLOOR_SIZE = 35;
 function loadImages() {
     var theme = "basic";
@@ -28,7 +28,7 @@ function drawPlayer(context, player, imageIndex, x, y, rotation, selectedPlayerX
     if (_animationPlayers !== undefined && _animationPlayers.length > 0) {
         for (var i = 0; i < _animationPlayers.length; i++) {
             var animationPlayer = _animationPlayers[i];
-            if (animationPlayer === null) {
+            if (animationPlayer === undefined) {
                 // Animation of this player has already finished.
                 continue;
             }
@@ -81,7 +81,7 @@ function showElement(id, modal) {
     element.style.display = "";
     var y = window.scrollY;
     if (modal) {
-        var width = _canvasElement != null ? _canvasElement.width : 900;
+        var width = _canvasElement != undefined ? _canvasElement.width : 900;
         var x = width / 2 - element.offsetWidth / 2;
         console.log("x: " + x);
         element.style.left = x + "px";
@@ -180,7 +180,7 @@ var ObjectAnimation = /** @class */ (function () {
 }());
 function update(timestamp) {
     var delta = (timestamp - _animationUpdate) / 1000;
-    if (_animationBall != null) {
+    if (_animationBall !== undefined) {
         if (_animationBall.startTime > 0) {
             _animationBall.startTime -= delta;
         }
@@ -190,7 +190,7 @@ function update(timestamp) {
             var currentAnimation = _animationBall.animations[_animationBall.index];
             var dx = (currentAnimation.target.x - currentAnimation.source.x) * _FLOOR_SIZE;
             var dy = (currentAnimation.target.y - currentAnimation.source.y) * _FLOOR_SIZE;
-            if (currentAnimation.current == null) {
+            if (currentAnimation.current === undefined) {
                 console.log("Ball started");
                 currentAnimation.current = new BoardPosition();
                 currentAnimation.current.x = currentAnimation.source.x * _FLOOR_SIZE;
@@ -204,11 +204,11 @@ function update(timestamp) {
                     _animationBall.index++;
                     if (_animationBall.index >= _animationBall.animations.length) {
                         console.log("Ball animation finished.");
-                        _animationBall = null;
+                        _animationBall = undefined;
                     }
                 }
             }
-            if (_animationBall != null) {
+            if (_animationBall != undefined) {
                 var percentage = currentAnimation.timeElapsed / currentAnimation.animationTime;
                 currentAnimation.current.x = currentAnimation.source.x * _FLOOR_SIZE + dx * percentage;
                 currentAnimation.current.y = currentAnimation.source.y * _FLOOR_SIZE + dy * percentage;
@@ -219,11 +219,11 @@ function update(timestamp) {
             }
         }
     }
-    if (_animationPlayers != null) {
+    if (_animationPlayers !== undefined) {
         var playerAnimationsStillRunning = false;
         for (var animationPlayerIndex = 0; animationPlayerIndex < _animationPlayers.length; animationPlayerIndex++) {
             var animationPlayer = _animationPlayers[animationPlayerIndex];
-            if (animationPlayer == null) {
+            if (animationPlayer === undefined) {
                 // This player animation has already finished.
                 continue;
             }
@@ -231,7 +231,7 @@ function update(timestamp) {
             var currentAnimation = animationPlayer.animations[animationPlayer.index];
             var dx = (currentAnimation.target.x - currentAnimation.source.x) * _FLOOR_SIZE;
             var dy = (currentAnimation.target.y - currentAnimation.source.y) * _FLOOR_SIZE;
-            if (currentAnimation.current == null) {
+            if (currentAnimation.current === undefined) {
                 currentAnimation.current = new BoardPosition();
                 currentAnimation.current.x = currentAnimation.source.x * _FLOOR_SIZE;
                 currentAnimation.current.y = currentAnimation.source.y * _FLOOR_SIZE;
@@ -244,12 +244,12 @@ function update(timestamp) {
                     animationPlayer.index++;
                     if (animationPlayer.index >= animationPlayer.animations.length) {
                         console.log("Player animation finished.");
-                        animationPlayer = null;
-                        _animationPlayers[animationPlayerIndex] = null;
+                        animationPlayer = undefined;
+                        _animationPlayers[animationPlayerIndex] = undefined;
                     }
                 }
             }
-            if (animationPlayer != null) {
+            if (animationPlayer !== undefined) {
                 var percentage = currentAnimation.timeElapsed / currentAnimation.animationTime;
                 currentAnimation.current.x = currentAnimation.source.x * _FLOOR_SIZE + dx * percentage;
                 currentAnimation.current.y = currentAnimation.source.y * _FLOOR_SIZE + dy * percentage;
@@ -258,18 +258,18 @@ function update(timestamp) {
             }
         }
         if (!playerAnimationsStillRunning) {
-            _animationPlayers = null;
+            _animationPlayers = undefined;
         }
     }
 }
 function gameViewAnimationFrame(timestamp) {
-    if (_animationUpdate == 0) {
+    if (_animationUpdate === 0) {
         _animationUpdate = timestamp;
     }
     update(timestamp);
     drawCanvas(_game);
-    if ((_animationPlayers != null && _animationPlayers.length > 0) ||
-        _animationBall != null) {
+    if ((_animationPlayers != undefined && _animationPlayers.length > 0) ||
+        _animationBall != undefined) {
         window.requestAnimationFrame(gameViewAnimationFrame);
     }
     else {
@@ -291,7 +291,7 @@ function drawCanvas(game) {
     _game = game;
     // TODO: Analyze that do we get a lot of these draw commands.
     //console.log(_game);
-    if (_context === null) {
+    if (_context === undefined) {
         return;
     }
     _context.save();
@@ -373,7 +373,7 @@ function drawCanvas(game) {
         }
         var selectedPlayerX = -1, selectedPlayerY = -1;
         var ballInPlayersHands = false;
-        if (game.selectedPlayer != null) {
+        if (game.selectedPlayer !== null) {
             selectedPlayerX = game.selectedPlayer.boardPosition.x;
             selectedPlayerY = game.selectedPlayer.boardPosition.y;
         }
@@ -381,9 +381,9 @@ function drawCanvas(game) {
             var player = game.homeTeam.players[p];
             var x = player.boardPosition.x;
             var y = player.boardPosition.y;
-            if (x != -1) {
+            if (x !== -1) {
                 var inAnimation = drawPlayer(_context, player, _IMAGE_PLAYER1, x, y, player.rotation, selectedPlayerX, selectedPlayerY);
-                if (inAnimation == false && x == game.ball.boardPosition.x && y == game.ball.boardPosition.y) {
+                if (inAnimation === false && x === game.ball.boardPosition.x && y === game.ball.boardPosition.y) {
                     ballInPlayersHands = true;
                 }
             }
@@ -399,13 +399,13 @@ function drawCanvas(game) {
                 }
             }
         }
-        if (_animationBall != null) {
+        if (_animationBall !== undefined) {
             // Ball in animation
             if (_animationBall.startTime > 0) {
                 // Static ball position since player has not yet reach this board position
                 _context.drawImage(_images[_IMAGE_BALL_ANIMATION], _animationBall.position.x * _FLOOR_SIZE, _animationBall.position.y * _FLOOR_SIZE);
             }
-            else if (_animationBall.rotation == -1) {
+            else if (_animationBall.rotation === -1) {
                 // Player carrying the ball
                 _context.save();
                 _context.translate(_animationBall.position.x + _FLOOR_SIZE / 2, _animationBall.position.y + _FLOOR_SIZE / 2);
@@ -423,7 +423,7 @@ function drawCanvas(game) {
                 _context.restore();
             }
         }
-        else if (game.ball.boardPosition.x != -1) {
+        else if (game.ball.boardPosition.x !== -1) {
             // Static ball position
             var ballImage = ballInPlayersHands ? _images[_IMAGE_BALL] : _images[_IMAGE_BALL_ANIMATION];
             _context.drawImage(ballImage, game.ball.boardPosition.x * _FLOOR_SIZE, game.ball.boardPosition.y * _FLOOR_SIZE);
@@ -446,19 +446,19 @@ function calculatePosition(event) {
     }
 }
 document.addEventListener("keydown", function (event) {
-    if (event.keyCode != 123 /* F12 */) {
+    if (event.keyCode !== 123 /* F12 */) {
         event.preventDefault();
     }
 });
 document.addEventListener("keyup", function (event) {
-    if (event.keyCode != 123 /* F12 */) {
+    if (event.keyCode !== 123 /* F12 */) {
         event.preventDefault();
         if (!_animationRunning) {
             DotNet.invokeMethod("UR.Client", "CanvasKeyUpReceived", event.keyCode);
         }
     }
 });
-window.addEventListener("scroll", function (event) {
+window.addEventListener("scroll", function () {
     scrollElement();
 });
 //# sourceMappingURL=GameView.js.map

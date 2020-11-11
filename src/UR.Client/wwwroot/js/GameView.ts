@@ -8,7 +8,7 @@ const _IMAGE_FLOOR_LIGHT = 2;
 const _IMAGE_BALL = 3;
 const _IMAGE_BALL_ANIMATION = 4;
 
-const _IMAGE_PLAYER1 = 5;
+const _IMAGE_PLAYER1 = 0;
 
 const _FLOOR_SIZE = 35;
 
@@ -37,7 +37,7 @@ function drawPlayer(context, player, imageIndex, x, y, rotation, selectedPlayerX
     if (_animationPlayers !== undefined && _animationPlayers.length > 0) {
         for (let i = 0; i < _animationPlayers.length; i++) {
             const animationPlayer = _animationPlayers[i];
-            if (animationPlayer === null) {
+            if (animationPlayer === undefined) {
                 // Animation of this player has already finished.
                 continue;
             }
@@ -97,7 +97,7 @@ function showElement(id: string, modal: boolean) {
 
     let y = window.scrollY;
     if (modal) {
-        let width = _canvasElement != null ? _canvasElement.width : 900;
+        let width = _canvasElement != undefined ? _canvasElement.width : 900;
         let x = width / 2 - element.offsetWidth / 2;
         console.log("x: " + x);
 
@@ -156,8 +156,8 @@ function initializeMovableElements() {
         function elementMove(e) {
             e.preventDefault();
 
-            let clientX = e.clientX || e.touches[0].clientX;
-            let clientY = e.clientY || e.touches[0].clientY;
+            const clientX = e.clientX || e.touches[0].clientX;
+            const clientY = e.clientY || e.touches[0].clientY;
 
             offsetX = startX - clientX;
             offsetY = startY - clientY;
@@ -227,23 +227,23 @@ class ObjectAnimation {
 }
 
 function update(timestamp: number) {
-    let delta = (timestamp - _animationUpdate) / 1000;
+    const delta = (timestamp - _animationUpdate) / 1000;
 
-    if (_animationBall != null) {
+    if (_animationBall !== undefined) {
         if (_animationBall.startTime > 0) {
             _animationBall.startTime -= delta;
         }
 
         if (_animationBall.startTime <= 0) {
 
-            let deltaBall = delta + _animationBall.startTime;
+            const deltaBall = delta + _animationBall.startTime;
             _animationBall.startTime = 0;
 
-            let currentAnimation = _animationBall.animations[_animationBall.index];
-            let dx = (currentAnimation.target.x - currentAnimation.source.x) * _FLOOR_SIZE;
-            let dy = (currentAnimation.target.y - currentAnimation.source.y) * _FLOOR_SIZE;
+            const currentAnimation = _animationBall.animations[_animationBall.index];
+            const dx = (currentAnimation.target.x - currentAnimation.source.x) * _FLOOR_SIZE;
+            const dy = (currentAnimation.target.y - currentAnimation.source.y) * _FLOOR_SIZE;
 
-            if (currentAnimation.current == null) {
+            if (currentAnimation.current === undefined) {
                 console.log("Ball started");
                 currentAnimation.current = new BoardPosition();
                 currentAnimation.current.x = currentAnimation.source.x * _FLOOR_SIZE;
@@ -258,13 +258,13 @@ function update(timestamp: number) {
                     _animationBall.index++;
                     if (_animationBall.index >= _animationBall.animations.length) {
                         console.log("Ball animation finished.");
-                        _animationBall = null;
+                        _animationBall = undefined;
                     }
                 }
             }
 
-            if (_animationBall != null) {
-                let percentage = currentAnimation.timeElapsed / currentAnimation.animationTime;
+            if (_animationBall != undefined) {
+                const percentage = currentAnimation.timeElapsed / currentAnimation.animationTime;
                 currentAnimation.current.x = currentAnimation.source.x * _FLOOR_SIZE + dx * percentage;
                 currentAnimation.current.y = currentAnimation.source.y * _FLOOR_SIZE + dy * percentage;
 
@@ -276,21 +276,21 @@ function update(timestamp: number) {
         }
     }
 
-    if (_animationPlayers != null) {
+    if (_animationPlayers !== undefined) {
         let playerAnimationsStillRunning = false;
         for (let animationPlayerIndex = 0; animationPlayerIndex < _animationPlayers.length; animationPlayerIndex++) {
             let animationPlayer = _animationPlayers[animationPlayerIndex];
-            if (animationPlayer == null) {
+            if (animationPlayer === undefined) {
                 // This player animation has already finished.
                 continue;
             }
 
             playerAnimationsStillRunning = true;
-            let currentAnimation = animationPlayer.animations[animationPlayer.index];
-            let dx = (currentAnimation.target.x - currentAnimation.source.x) * _FLOOR_SIZE;
-            let dy = (currentAnimation.target.y - currentAnimation.source.y) * _FLOOR_SIZE;
+            const currentAnimation = animationPlayer.animations[animationPlayer.index];
+            const dx = (currentAnimation.target.x - currentAnimation.source.x) * _FLOOR_SIZE;
+            const dy = (currentAnimation.target.y - currentAnimation.source.y) * _FLOOR_SIZE;
 
-            if (currentAnimation.current == null) {
+            if (currentAnimation.current === undefined) {
                 currentAnimation.current = new BoardPosition();
                 currentAnimation.current.x = currentAnimation.source.x * _FLOOR_SIZE;
                 currentAnimation.current.y = currentAnimation.source.y * _FLOOR_SIZE;
@@ -304,14 +304,14 @@ function update(timestamp: number) {
                     animationPlayer.index++;
                     if (animationPlayer.index >= animationPlayer.animations.length) {
                         console.log("Player animation finished.");
-                        animationPlayer = null;
-                        _animationPlayers[animationPlayerIndex] = null;
+                        animationPlayer = undefined;
+                        _animationPlayers[animationPlayerIndex] = undefined;
                     }
                 }
             }
 
-            if (animationPlayer != null) {
-                let percentage = currentAnimation.timeElapsed / currentAnimation.animationTime;
+            if (animationPlayer !== undefined) {
+                const percentage = currentAnimation.timeElapsed / currentAnimation.animationTime;
                 currentAnimation.current.x = currentAnimation.source.x * _FLOOR_SIZE + dx * percentage;
                 currentAnimation.current.y = currentAnimation.source.y * _FLOOR_SIZE + dy * percentage;
 
@@ -321,22 +321,22 @@ function update(timestamp: number) {
         }
 
         if (!playerAnimationsStillRunning) {
-            _animationPlayers = null;
+            _animationPlayers = undefined;
         }
     }
 }
 
 function gameViewAnimationFrame(timestamp: number) {
 
-    if (_animationUpdate == 0) {
+    if (_animationUpdate === 0) {
         _animationUpdate = timestamp;
     }
 
     update(timestamp);
     drawCanvas(_game);
 
-    if ((_animationPlayers != null && _animationPlayers.length > 0) ||
-        _animationBall != null) {
+    if ((_animationPlayers != undefined && _animationPlayers.length > 0) ||
+        _animationBall != undefined) {
         window.requestAnimationFrame(gameViewAnimationFrame);
     }
     else {
@@ -364,7 +364,7 @@ function drawCanvas(game: any) {
     // TODO: Analyze that do we get a lot of these draw commands.
     //console.log(_game);
 
-    if (_context === null) {
+    if (_context === undefined) {
         return;
     }
 
@@ -401,7 +401,7 @@ function drawCanvas(game: any) {
                 let availableExtraMovementSelection = false;
                 let selectedMovementSelection = false;
                 for (let m = 0; m < game.availableMoves.length; m++) {
-                    let move = game.availableMoves[m];
+                    const move = game.availableMoves[m];
                     if (move.x === x && move.y === y) {
                         availableMovementSelection = true;
                         break;
@@ -409,7 +409,7 @@ function drawCanvas(game: any) {
                 }
 
                 for (let m = 0; m < game.availableExtraMoves.length; m++) {
-                    let move = game.availableExtraMoves[m];
+                    const move = game.availableExtraMoves[m];
                     if (move.x === x && move.y === y) {
                         availableExtraMovementSelection = true;
                         break;
@@ -417,7 +417,7 @@ function drawCanvas(game: any) {
                 }
 
                 for (let m = 0; m < game.selectedMoves.length; m++) {
-                    let move = game.selectedMoves[m];
+                    const move = game.selectedMoves[m];
                     if (move.x === x && move.y === y) {
                         selectedMovementSelection = true;
                         break;
@@ -456,18 +456,18 @@ function drawCanvas(game: any) {
 
         let selectedPlayerX = -1, selectedPlayerY = -1;
         let ballInPlayersHands = false;
-        if (game.selectedPlayer != null) {
+        if (game.selectedPlayer !== null) {
             selectedPlayerX = game.selectedPlayer.boardPosition.x;
             selectedPlayerY = game.selectedPlayer.boardPosition.y;
         }
 
         for (let p = 0; p < game.homeTeam.players.length; p++) {
-            let player = game.homeTeam.players[p];
-            let x = player.boardPosition.x;
-            let y = player.boardPosition.y;
-            if (x != -1) {
-                let inAnimation = drawPlayer(_context, player, _IMAGE_PLAYER1, x, y, player.rotation, selectedPlayerX, selectedPlayerY);
-                if (inAnimation == false && x == game.ball.boardPosition.x && y == game.ball.boardPosition.y) {
+            const player = game.homeTeam.players[p];
+            const x = player.boardPosition.x;
+            const y = player.boardPosition.y;
+            if (x !== -1) {
+                const inAnimation = drawPlayer(_context, player, _IMAGE_PLAYER1, x, y, player.rotation, selectedPlayerX, selectedPlayerY);
+                if (inAnimation === false && x === game.ball.boardPosition.x && y === game.ball.boardPosition.y) {
                     ballInPlayersHands = true;
                 }
             }
@@ -486,13 +486,13 @@ function drawCanvas(game: any) {
             }
         }
 
-        if (_animationBall != null) {
+        if (_animationBall !== undefined) {
             // Ball in animation
             if (_animationBall.startTime > 0) {
                 // Static ball position since player has not yet reach this board position
                 _context.drawImage(_images[_IMAGE_BALL_ANIMATION], _animationBall.position.x * _FLOOR_SIZE, _animationBall.position.y * _FLOOR_SIZE);
             }
-            else if (_animationBall.rotation == -1) {
+            else if (_animationBall.rotation ===-1) {
                 // Player carrying the ball
                 _context.save();
                 _context.translate(_animationBall.position.x + _FLOOR_SIZE / 2, _animationBall.position.y + _FLOOR_SIZE / 2);
@@ -510,7 +510,7 @@ function drawCanvas(game: any) {
                 _context.restore();
             }
         }
-        else if (game.ball.boardPosition.x != -1) {
+        else if (game.ball.boardPosition.x !== -1) {
             // Static ball position
             const ballImage = ballInPlayersHands ? _images[_IMAGE_BALL] : _images[_IMAGE_BALL_ANIMATION];
             _context.drawImage(ballImage, game.ball.boardPosition.x * _FLOOR_SIZE, game.ball.boardPosition.y * _FLOOR_SIZE);
@@ -538,13 +538,13 @@ function calculatePosition(event: MouseEvent): void {
 }
 
 document.addEventListener("keydown", (event: KeyboardEvent) => {
-    if (event.keyCode != 123 /* F12 */) {
+    if (event.keyCode !== 123 /* F12 */) {
         event.preventDefault();
     }
 });
 
 document.addEventListener("keyup", (event: KeyboardEvent) => {
-    if (event.keyCode != 123 /* F12 */) {
+    if (event.keyCode !== 123 /* F12 */) {
         event.preventDefault();
 
         if (!_animationRunning) {
@@ -553,6 +553,6 @@ document.addEventListener("keyup", (event: KeyboardEvent) => {
     }
 });
 
-window.addEventListener("scroll", function (event) {
+window.addEventListener("scroll", function () {
     scrollElement();
 });

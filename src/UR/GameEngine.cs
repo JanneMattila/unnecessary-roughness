@@ -347,7 +347,6 @@ namespace UR
                 }
 
                 _game.AvailableMoves.AddRange(availableMoves);
-                _game.AvailableExtraMoves.AddRange(availableExtraMoves);
 
                 PlayerInformationVisibility = ElementVisibility.VisibilityNormal;
                 ActionMenuVisibility = ElementVisibility.VisibilityNoneElement;
@@ -358,7 +357,6 @@ namespace UR
         private void ClearGameBoardSelection()
         {
             _game.AvailableMoves.Clear();
-            _game.AvailableExtraMoves.Clear();
             _game.SelectedMoves.Clear();
         }
 

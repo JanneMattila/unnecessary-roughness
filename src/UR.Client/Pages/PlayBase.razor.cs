@@ -45,12 +45,8 @@ namespace UR.Client.Pages
                     HttpGetEventsAsync = async (id) => await Http.GetStringAsync($"api/Events/{id}")
                 };
 
-                _gameEngine = new GameEngine(new BrowserLogger(), new Data.Game()
-                {
-                    ID = "123",
-                    HomeTeam = new Team(),
-                    VisitorTeam = new Team()
-                }, randomizer, eventStore)
+                var generator = new GameDataGenerator();
+                _gameEngine = new GameEngine(new BrowserLogger(), generator.NewGame(), randomizer, eventStore)
                 {
                     ExecuteAnimations = (playerAnimations, ballAnimation) =>
                     {

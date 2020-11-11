@@ -10,7 +10,7 @@ const _IMAGE_BALL_ANIMATION = 4;
 
 const _IMAGE_PLAYER1 = 5;
 
-const _FLOOR_SIZE = 30;
+const _FLOOR_SIZE = 35;
 
 function loadImages() {
     const theme = "basic";
@@ -373,20 +373,22 @@ function drawCanvas(game: any) {
 
     const width = 25;
     const height = 50;
+    const xDrawOffset = 1;
+    const yDrawOffset = 1;
 
     for (let x = 0; x <= width; x++) {
         // North-south lines
         _context.beginPath();
-        _context.moveTo(x * _FLOOR_SIZE, _FLOOR_SIZE);
-        _context.lineTo(x * _FLOOR_SIZE, height * _FLOOR_SIZE);
+        _context.moveTo(x * _FLOOR_SIZE + xDrawOffset, yDrawOffset);
+        _context.lineTo(x * _FLOOR_SIZE + xDrawOffset, height * _FLOOR_SIZE + yDrawOffset);
         _context.stroke();
     }
 
     for (let y = 0; y <= height; y++) {
         // East-West lines
         _context.beginPath();
-        _context.moveTo(0, y * _FLOOR_SIZE);
-        _context.lineTo(width * _FLOOR_SIZE, y * _FLOOR_SIZE);
+        _context.moveTo(xDrawOffset, y * _FLOOR_SIZE + yDrawOffset);
+        _context.lineTo(width * _FLOOR_SIZE + xDrawOffset, y * _FLOOR_SIZE + yDrawOffset);
         _context.stroke();
     }
 
@@ -510,7 +512,7 @@ function drawCanvas(game: any) {
         }
         else if (game.ball.boardPosition.x != -1) {
             // Static ball position
-            let ballImage = ballInPlayersHands ? _images[_IMAGE_BALL] : _images[_IMAGE_BALL_ANIMATION];
+            const ballImage = ballInPlayersHands ? _images[_IMAGE_BALL] : _images[_IMAGE_BALL_ANIMATION];
             _context.drawImage(ballImage, game.ball.boardPosition.x * _FLOOR_SIZE, game.ball.boardPosition.y * _FLOOR_SIZE);
         }
     }
@@ -525,8 +527,8 @@ class DotNet {
 function calculatePosition(event: MouseEvent): void {
 
     if (!_animationRunning) {
-        let x = Math.floor(event.offsetX / _FLOOR_SIZE);
-        let y = Math.floor(event.offsetY / _FLOOR_SIZE);
+        const x = Math.floor(event.offsetX / _FLOOR_SIZE);
+        const y = Math.floor(event.offsetY / _FLOOR_SIZE);
 
         console.log("Clicked canvas at " + x + " - " + y);
         console.log(_game);

@@ -6,7 +6,7 @@ var _IMAGE_FLOOR_LIGHT = 2;
 var _IMAGE_BALL = 3;
 var _IMAGE_BALL_ANIMATION = 4;
 var _IMAGE_PLAYER1 = 5;
-var _FLOOR_SIZE = 30;
+var _FLOOR_SIZE = 35;
 function loadImages() {
     var theme = "basic";
     var files = [
@@ -298,18 +298,20 @@ function drawCanvas(game) {
     _context.clearRect(0, 0, _canvasElement.width, _canvasElement.height);
     var width = 25;
     var height = 50;
+    var xDrawOffset = 1;
+    var yDrawOffset = 1;
     for (var x = 0; x <= width; x++) {
         // North-south lines
         _context.beginPath();
-        _context.moveTo(x * _FLOOR_SIZE, _FLOOR_SIZE);
-        _context.lineTo(x * _FLOOR_SIZE, height * _FLOOR_SIZE);
+        _context.moveTo(x * _FLOOR_SIZE + xDrawOffset, yDrawOffset);
+        _context.lineTo(x * _FLOOR_SIZE + xDrawOffset, height * _FLOOR_SIZE + yDrawOffset);
         _context.stroke();
     }
     for (var y = 0; y <= height; y++) {
         // East-West lines
         _context.beginPath();
-        _context.moveTo(0, y * _FLOOR_SIZE);
-        _context.lineTo(width * _FLOOR_SIZE, y * _FLOOR_SIZE);
+        _context.moveTo(xDrawOffset, y * _FLOOR_SIZE + yDrawOffset);
+        _context.lineTo(width * _FLOOR_SIZE + xDrawOffset, y * _FLOOR_SIZE + yDrawOffset);
         _context.stroke();
     }
     if (_imagesLoaded === _imagesToLoad) {

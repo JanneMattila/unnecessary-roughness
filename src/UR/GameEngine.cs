@@ -169,7 +169,7 @@ namespace UR
             var size = GameBoard.BoardWidth * GameBoard.BoardHeight;
             for (var i = 0; i < size; i++)
             {
-                _boardPositions[i] = null;
+                _boardPositions[i] = Player.Empty;
             }
 
             var allPlayers = _game.HomeTeam.Players.ToList();
@@ -344,7 +344,7 @@ namespace UR
                 var board = new int[GameBoard.BoardWidth * GameBoard.BoardHeight];
                 for (var i = 0; i < _boardPositions.Length; i++)
                 {
-                    board[i] = _boardPositions[i] != null ? 1 : 0;
+                    board[i] = _boardPositions[i].IsEmpty() ? 1 : 0;
                 }
 
                 for (var i = 0; i < selectedPlayer.MovementLeft + 2; i++)

@@ -1,4 +1,6 @@
-﻿namespace UR.Data
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace UR.Data
 {
     public class BoardPosition
     {
@@ -12,7 +14,7 @@
             Y = -1;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is BoardPosition other)
             {

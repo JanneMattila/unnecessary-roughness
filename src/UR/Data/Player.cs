@@ -31,5 +31,18 @@ namespace UR.Data
         public List<string> Skills { get; set; } = new();
 
         public string Team { get; set; } = string.Empty;
+
+        public static Player Empty
+        {
+            get
+            {
+                return new Player();
+            }
+        }
+
+        public bool IsEmpty()
+        {
+            return string.IsNullOrEmpty(ID);
+        }
     }
 }

@@ -4,6 +4,6 @@ namespace UR.Events
 {
     public class GameDataEvent : Event
     {
-        public Game Game { get; set; }
+        public Game Game { get; set; } = new();
     }
 }

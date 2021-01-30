@@ -13,8 +13,8 @@ namespace UR.Events
 
         public Guid InitiatedBy { get; set; }
 
-        private static readonly XmlSerializer s_serializer = new XmlSerializer(typeof(Event));
-        private static readonly XmlSerializer s_serializerList = new XmlSerializer(typeof(List<Event>));
+        private static readonly XmlSerializer s_serializer = new(typeof(Event));
+        private static readonly XmlSerializer s_serializerList = new(typeof(List<Event>));
 
         public Event()
         {

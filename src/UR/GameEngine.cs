@@ -350,6 +350,8 @@ namespace UR
 
                 PlayerInformationVisibility = ElementVisibility.VisibilityNormal;
                 ActionMenuVisibility = ElementVisibility.VisibilityNoneElement;
+                
+                ExecuteDraw(_game);
             }
             await Task.CompletedTask;
         }

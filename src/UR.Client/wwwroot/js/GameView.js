@@ -6,11 +6,24 @@ var _IMAGE_FLOOR_LIGHT = 2;
 var _IMAGE_BALL = 3;
 var _IMAGE_BALL_ANIMATION = 4;
 var _IMAGE_PLAYER1 = 0;
-var _FLOOR_SIZE = 35;
+var _FLOOR_SIZE = 34;
+var _animationRunning = false;
+var _animationUpdate = 0;
+var _animationPlayers;
+var _animationBall;
+var _game;
+var _scrollElements = new Object();
 function loadImages() {
     var theme = "basic";
     var files = [
-        "player-32x32.png"
+        "goalie-blue.png",
+        "halfback-blue.png",
+        "fullback-blue.png",
+        "forward-blue.png",
+        "goalie-red.png",
+        "halfback-red.png",
+        "fullback-red.png",
+        "forward-red.png"
     ];
     _imagesToLoad = files.length;
     for (var i = 0; i < files.length; i++) {
@@ -25,6 +38,9 @@ function loadImages() {
 }
 loadImages();
 function drawPlayer(context, player, imageIndex, x, y, rotation, selectedPlayerX, selectedPlayerY) {
+    imageIndex = Math.floor(Math.random() * _imagesLoaded);
+    var offsetX = 2;
+    var offsetY = 2;
     if (_animationPlayers !== undefined && _animationPlayers.length > 0) {
         for (var i = 0; i < _animationPlayers.length; i++) {
             var animationPlayer = _animationPlayers[i];
@@ -37,7 +53,7 @@ function drawPlayer(context, player, imageIndex, x, y, rotation, selectedPlayerX
                 context.save();
                 context.translate(animationPlayer.position.x + _FLOOR_SIZE / 2, animationPlayer.position.y + _FLOOR_SIZE / 2);
                 context.rotate(Math.PI * animationPlayer.rotation / 180);
-                context.translate(-_FLOOR_SIZE / 2, -_FLOOR_SIZE / 2);
+                context.translate(-_FLOOR_SIZE / 2 + offsetX, -_FLOOR_SIZE / 2 + offsetY);
                 context.drawImage(_images[imageIndex], 0, 0);
                 context.restore();
                 return true;
@@ -55,7 +71,7 @@ function drawPlayer(context, player, imageIndex, x, y, rotation, selectedPlayerX
     }
     if (player.knockDown) {
         context.save();
-        context.translate(x * _FLOOR_SIZE, y * _FLOOR_SIZE);
+        context.translate(x * _FLOOR_SIZE + offsetX, y * _FLOOR_SIZE + offsetY);
         context.drawImage(_images[imageIndex + 1], 0, 0);
         context.restore();
     }
@@ -63,13 +79,12 @@ function drawPlayer(context, player, imageIndex, x, y, rotation, selectedPlayerX
         context.save();
         context.translate(x * _FLOOR_SIZE + _FLOOR_SIZE / 2, y * _FLOOR_SIZE + _FLOOR_SIZE / 2);
         context.rotate(Math.PI * rotation / 180);
-        context.translate(-_FLOOR_SIZE / 2, -_FLOOR_SIZE / 2);
+        context.translate(-_FLOOR_SIZE / 2 + offsetX, -_FLOOR_SIZE / 2 + offsetY);
         context.drawImage(_images[imageIndex], 0, 0);
         context.restore();
     }
     return false;
 }
-var _scrollElements = new Object();
 function showElement(id, modal) {
     var element = document.getElementById(id);
     //let clientX = e.clientX || e.touches[0].clientX;
@@ -158,11 +173,6 @@ function initializeGameview(canvasElement) {
     initializeCanvas(canvasElement);
     initializeMovableElements();
 }
-var _animationRunning = false;
-var _animationUpdate = 0;
-var _animationPlayers;
-var _animationBall;
-var _game;
 var BoardPosition = /** @class */ (function () {
     function BoardPosition() {
     }
@@ -268,8 +278,8 @@ function gameViewAnimationFrame(timestamp) {
     }
     update(timestamp);
     drawCanvas(_game);
-    if ((_animationPlayers != undefined && _animationPlayers.length > 0) ||
-        _animationBall != undefined) {
+    if ((_animationPlayers !== undefined && _animationPlayers.length > 0) ||
+        _animationBall !== undefined) {
         window.requestAnimationFrame(gameViewAnimationFrame);
     }
     else {
@@ -392,9 +402,9 @@ function drawCanvas(game) {
             var player = game.visitorTeam.players[p];
             var x = player.boardPosition.x;
             var y = player.boardPosition.y;
-            if (x != -1) {
+            if (x !== -1) {
                 var inAnimation = drawPlayer(_context, player, _IMAGE_PLAYER1, x, y, player.rotation, selectedPlayerX, selectedPlayerY);
-                if (inAnimation == false && x == game.ball.boardPosition.x && y == game.ball.boardPosition.y) {
+                if (inAnimation === false && x === game.ball.boardPosition.x && y == game.ball.boardPosition.y) {
                     ballInPlayersHands = true;
                 }
             }

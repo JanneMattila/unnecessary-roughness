@@ -10,12 +10,27 @@ const _IMAGE_BALL_ANIMATION = 4;
 
 const _IMAGE_PLAYER1 = 0;
 
-const _FLOOR_SIZE = 35;
+const _FLOOR_SIZE = 34;
+
+let _animationRunning = false;
+let _animationUpdate = 0;
+let _animationPlayers: ObjectAnimation[];
+let _animationBall: ObjectAnimation;
+let _game: any;
+
+let _scrollElements = new Object();
 
 function loadImages() {
     const theme = "basic";
     const files = [
-        "player-32x32.png"
+        "goalie-blue.png",
+        "halfback-blue.png",
+        "fullback-blue.png",
+        "forward-blue.png",
+        "goalie-red.png",
+        "halfback-red.png",
+        "fullback-red.png",
+        "forward-red.png"
     ];
     _imagesToLoad = files.length;
 
@@ -34,6 +49,9 @@ loadImages();
 
 function drawPlayer(context, player, imageIndex, x, y, rotation, selectedPlayerX, selectedPlayerY) {
 
+    imageIndex = Math.floor(Math.random() * _imagesLoaded);
+    const offsetX = 2;
+    const offsetY = 2;
     if (_animationPlayers !== undefined && _animationPlayers.length > 0) {
         for (let i = 0; i < _animationPlayers.length; i++) {
             const animationPlayer = _animationPlayers[i];
@@ -47,7 +65,7 @@ function drawPlayer(context, player, imageIndex, x, y, rotation, selectedPlayerX
                 context.save();
                 context.translate(animationPlayer.position.x + _FLOOR_SIZE / 2, animationPlayer.position.y + _FLOOR_SIZE / 2);
                 context.rotate(Math.PI * animationPlayer.rotation / 180);
-                context.translate(-_FLOOR_SIZE / 2, -_FLOOR_SIZE / 2);
+                context.translate(-_FLOOR_SIZE / 2 + offsetX, -_FLOOR_SIZE / 2 + offsetY);
                 context.drawImage(_images[imageIndex], 0, 0);
                 context.restore();
                 return true;
@@ -67,7 +85,7 @@ function drawPlayer(context, player, imageIndex, x, y, rotation, selectedPlayerX
 
     if (player.knockDown) {
         context.save();
-        context.translate(x * _FLOOR_SIZE, y * _FLOOR_SIZE);
+        context.translate(x * _FLOOR_SIZE + offsetX, y * _FLOOR_SIZE + offsetY);
         context.drawImage(_images[imageIndex + 1], 0, 0);
         context.restore();
     }
@@ -75,7 +93,7 @@ function drawPlayer(context, player, imageIndex, x, y, rotation, selectedPlayerX
         context.save();
         context.translate(x * _FLOOR_SIZE + _FLOOR_SIZE / 2, y * _FLOOR_SIZE + _FLOOR_SIZE / 2);
         context.rotate(Math.PI * rotation / 180);
-        context.translate(-_FLOOR_SIZE / 2, -_FLOOR_SIZE / 2);
+        context.translate(-_FLOOR_SIZE / 2 + offsetX, -_FLOOR_SIZE / 2 + offsetY);
         context.drawImage(_images[imageIndex], 0, 0);
         context.restore();
     }
@@ -83,7 +101,6 @@ function drawPlayer(context, player, imageIndex, x, y, rotation, selectedPlayerX
     return false;
 }
 
-let _scrollElements = new Object();
 function showElement(id: string, modal: boolean) {
     let element = document.getElementById(id);
     //let clientX = e.clientX || e.touches[0].clientX;
@@ -194,12 +211,6 @@ function initializeGameview(canvasElement: HTMLCanvasElement) {
     initializeCanvas(canvasElement);
     initializeMovableElements();
 }
-
-let _animationRunning = false;
-let _animationUpdate = 0;
-let _animationPlayers: ObjectAnimation[];
-let _animationBall: ObjectAnimation;
-let _game: any;
 
 class BoardPosition {
     x: number;
@@ -335,8 +346,8 @@ function gameViewAnimationFrame(timestamp: number) {
     update(timestamp);
     drawCanvas(_game);
 
-    if ((_animationPlayers != undefined && _animationPlayers.length > 0) ||
-        _animationBall != undefined) {
+    if ((_animationPlayers !== undefined && _animationPlayers.length > 0) ||
+        _animationBall !== undefined) {
         window.requestAnimationFrame(gameViewAnimationFrame);
     }
     else {
@@ -474,13 +485,13 @@ function drawCanvas(game: any) {
         }
 
         for (let p = 0; p < game.visitorTeam.players.length; p++) {
-            let player = game.visitorTeam.players[p];
-            let x = player.boardPosition.x;
-            let y = player.boardPosition.y;
+            const player = game.visitorTeam.players[p];
+            const x = player.boardPosition.x;
+            const y = player.boardPosition.y;
 
-            if (x != -1) {
-                let inAnimation = drawPlayer(_context, player, _IMAGE_PLAYER1, x, y, player.rotation, selectedPlayerX, selectedPlayerY);
-                if (inAnimation == false && x == game.ball.boardPosition.x && y == game.ball.boardPosition.y) {
+            if (x !== -1) {
+                const inAnimation = drawPlayer(_context, player, _IMAGE_PLAYER1, x, y, player.rotation, selectedPlayerX, selectedPlayerY);
+                if (inAnimation === false && x === game.ball.boardPosition.x && y == game.ball.boardPosition.y) {
                     ballInPlayersHands = true;
                 }
             }

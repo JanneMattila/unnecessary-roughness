@@ -5,20 +5,15 @@ namespace UR.Animation
 {
     public class ObjectAnimation
     {
-        public string ID { get; set; }
+        public string ID { get; set; } = string.Empty;
         public int Index { get; set; }
 
-        public BoardPosition Position { get; set; }
+        public BoardPosition Position { get; set; } = new();
 
         public int Rotation { get; set; }
 
         public double StartTime { get; set; }
 
-        public List<AnimationMove> Animations { get; set; }
-
-        public ObjectAnimation()
-        {
-            Animations = new List<AnimationMove>();
-        }
+        public List<AnimationMove> Animations { get; set; } = new();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
@@ -12,22 +13,20 @@ namespace UR.Client.Pages
         private bool disposedValue;
 
         [Parameter]
-        public string GameID { get; set; }
+        public string GameID { get; set; } = string.Empty;
 
-        [Inject] private HttpClient Http { get; set; }
-        [Inject] private IJSRuntime JSRuntime { get; set; }
+        [AllowNull] [Inject] private HttpClient Http { get; set; }
+        [AllowNull] [Inject] private IJSRuntime JSRuntime { get; set; }
 
+        [AllowNull]
         protected static GameEngine _gameEngine;
+        [AllowNull]
         protected static Action _stateHasChanged;
-        protected static IJSRuntime JSRuntime2;
         protected bool _loaded = false;
         protected static ElementReference _canvas;
 
         protected override async Task OnInitializedAsync()
         {
-            // TODO: Fix static identifiers.
-            JSRuntime2 = JSRuntime;
-
             _stateHasChanged = () => StateHasChanged();
 
             await base.OnInitializedAsync();
@@ -50,24 +49,24 @@ namespace UR.Client.Pages
                 {
                     ExecuteAnimations = (playerAnimations, ballAnimation) =>
                     {
-                        JSRuntime.InvokeAsync<object>("animate", playerAnimations, ballAnimation);
+                        JSRuntime?.InvokeAsync<object>("animate", playerAnimations, ballAnimation);
                     },
 
                     ExecuteDraw = (game) =>
                     {
-                        JSRuntime.InvokeAsync<object>("drawCanvas", game);
+                        JSRuntime?.InvokeAsync<object>("drawCanvas", game);
                         _stateHasChanged();
                     },
 
                     ShowElement = (id, modal) =>
                     {
-                        JSRuntime.InvokeAsync<object>("showElement", id, modal);
+                        JSRuntime?.InvokeAsync<object>("showElement", id, modal);
                         _stateHasChanged();
                     },
 
                     HideElement = (id) =>
                     {
-                        JSRuntime.InvokeAsync<object>("hideElement", id);
+                        JSRuntime?.InvokeAsync<object>("hideElement", id);
                         _stateHasChanged();
                     }
                 };
@@ -78,7 +77,7 @@ namespace UR.Client.Pages
         {
             await base.OnAfterRenderAsync(firstRender);
 
-            if (!_loaded)
+            if (!_loaded && _gameEngine != null)
             {
                 _loaded = true;
                 await _gameEngine.LoadGameEventsAsync();

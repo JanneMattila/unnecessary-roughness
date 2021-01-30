@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -28,14 +29,16 @@ namespace UR.Events
             return writer.ToString();
         }
 
-        static public T FromXmlToEvent<T>(string xml)
+        [return: MaybeNull]
+        public static T FromXmlToEvent<T>(string xml) where T : class
         {
             var serializer = new XmlSerializer(typeof(T));
             using var reader = new StringReader(xml);
-            return (T)serializer.Deserialize(reader);
+            return serializer.Deserialize(reader) as T;
         }
 
-        static public List<Event> FromXmlToEventList(string xml)
+        [return: MaybeNull]
+        public static List<Event> FromXmlToEventList(string xml)
         {
             using var reader = new StringReader(xml);
             return s_serializerList.Deserialize(reader) as List<Event>;

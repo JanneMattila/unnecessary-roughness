@@ -5,12 +5,7 @@ namespace UR
 {
     public class ShortestPathNode
     {
-        public BoardPosition Position { get; set; }
-        public List<BoardPosition> Path { get; set; }
-
-        public ShortestPathNode()
-        {
-            Path = new List<BoardPosition>();
-        }
+        public BoardPosition Position { get; set; } = new();
+        public List<BoardPosition> Path { get; set; } = new();
     }
 }

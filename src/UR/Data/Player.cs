@@ -4,15 +4,15 @@ namespace UR.Data
 {
     public class Player
     {
-        public string ID { get; set; }
+        public string ID { get; set; } = string.Empty;
 
-        public string Number { get; set; }
+        public string Number { get; set; } = string.Empty;
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public string Position { get; set; }
+        public string Position { get; set; } = string.Empty;
 
-        public BoardPosition BoardPosition { get; set; }
+        public BoardPosition BoardPosition { get; set; } = new();
 
         public int Rotation { get; set; }
 
@@ -28,14 +28,8 @@ namespace UR.Data
         
         public int Cost { get; set; }
 
-        public List<string> Skills { get; set; }
+        public List<string> Skills { get; set; } = new();
 
-        public string Team { get; set; }
-
-        public Player()
-        {
-            Skills = new List<string>();
-            BoardPosition = new BoardPosition();
-        }
+        public string Team { get; set; } = string.Empty;
     }
 }

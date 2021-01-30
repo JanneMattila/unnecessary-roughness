@@ -4,9 +4,9 @@ namespace UR.Animation
 {
     public class AnimationMove
     {
-        public BoardPosition Source { get; set; }
+        public BoardPosition Source { get; set; } = new();
 
-        public BoardPosition Target { get; set; }
+        public BoardPosition Target { get; set; } = new();
 
         public int Rotation { get; set; }
 

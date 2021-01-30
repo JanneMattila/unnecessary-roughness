@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -19,14 +20,21 @@ namespace UR
         private GameState _gameState = GameState.Initialization;
         private Game _game;
 
-        private string _currentTeam = null;
+        private string _currentTeam = string.Empty;
         private bool _isAnimationEnabled = false;
 
         public Game Game => _game;
 
-        public Action<ObjectAnimation[], ObjectAnimation> ExecuteAnimations;
+        [AllowNull]
         public Action<Game> ExecuteDraw;
+
+        [AllowNull]
+        public Action<ObjectAnimation[], ObjectAnimation> ExecuteAnimations;
+
+        [AllowNull]
         public Action<string, bool> ShowElement;
+
+        [AllowNull]
         public Action<string> HideElement;
 
         internal int FloodFillNodeScanCount { get; set; }
@@ -34,7 +42,7 @@ namespace UR
         internal int FloodFillExtraMovesCount { get; set; }
         internal int ShortestPathNodeScanCount { get; set; }
 
-        public string ActionMenuVisibility;
+        public string ActionMenuVisibility = ElementVisibility.VisibilityNoneElement;
 
         private bool _playerInformationVisibility;
         public bool PlayerInformationVisibility
@@ -97,10 +105,10 @@ namespace UR
 
             await SetEventsAsync(events);
 
-            //if (createGameEvent)
-            //{
-            //    await _eventStore.AppendEventAsync(_game.ID, events.First());
-            //}
+            if (createGameEvent)
+            {
+                await _eventStore.AppendEventAsync(_game.ID, events.First());
+            }
 
             ExecuteDraw(_game);
         }

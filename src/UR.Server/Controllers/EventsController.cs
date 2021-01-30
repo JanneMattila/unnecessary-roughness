@@ -30,10 +30,8 @@ namespace UR.Server.Controllers
                 if (System.IO.File.Exists("eventstore.xml"))
                 {
                     var serializer = new XmlSerializer(typeof(List<Event>));
-                    using (var reader = System.IO.File.OpenRead("eventstore.xml"))
-                    {
-                        s_events = serializer.Deserialize(reader) as List<Event>;
-                    }
+                    using var reader = System.IO.File.OpenRead("eventstore.xml");
+                    s_events = serializer.Deserialize(reader) as List<Event> ?? new List<Event>();
                 }
 
                 // Override to be blank
@@ -78,10 +76,8 @@ namespace UR.Server.Controllers
             s_events.Clear();
 #if DEBUG
             var serializer = new XmlSerializer(s_events.GetType());
-            using (var writer = System.IO.File.CreateText("eventstore.xml"))
-            {
-                serializer.Serialize(writer, s_events);
-            }
+            using var writer = System.IO.File.CreateText("eventstore.xml");
+            serializer.Serialize(writer, s_events);
 #endif
         }
     }

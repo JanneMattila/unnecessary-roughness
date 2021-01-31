@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace UR.Data
 {
     public class Game
     {
+        [JsonPropertyName("id")]
         public string ID { get; set; }
 
         public int Turn { get; set; }

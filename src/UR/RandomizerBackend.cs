@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Threading.Tasks;
 using UR.Events;
 
@@ -12,8 +13,8 @@ namespace UR
 
         public async Task<DiceEvent> GetDicesAsync(string id, string type, int count)
         {
-            var xml = await FetchDicesAsync(id, type, count);
-            var evt = Event.FromXmlToEvent<DiceEvent>(xml);
+            var json = await FetchDicesAsync(id, type, count);
+            var evt = JsonSerializer.Deserialize<DiceEvent>(json);
             if (evt == null) throw new Exception("Cannot convert data to dice roll");
             return evt;
         }

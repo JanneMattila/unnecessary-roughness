@@ -1,47 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Xml.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace UR.Events
 {
-    [XmlInclude(typeof(DiceEvent))]
-    [XmlInclude(typeof(GameDataEvent))]
     public class Event
     {
+        [JsonPropertyName("id")]
         public Guid ID { get; set; }
 
+        [JsonPropertyName("type")]
+        public string Type { get; set; } = string.Empty;
+
+        [JsonPropertyName("initiatedBy")]
         public Guid InitiatedBy { get; set; }
 
-        private static readonly XmlSerializer s_serializer = new(typeof(Event));
-        private static readonly XmlSerializer s_serializerList = new(typeof(List<Event>));
-
-        public Event()
+        public string ToJson()
         {
+            this.Type = this.GetType().Name;
+            return JsonSerializer.Serialize(this);
         }
 
-        public string ToXml()
+        public static List<Event> FromJsonToEventList(string json)
         {
-            using var writer = new StringWriter();
-            s_serializer.Serialize(writer, this);
-            writer.Flush();
-            return writer.ToString();
+            var list = new List<Event>();
+            var jsonDocument = JsonDocument.Parse(json);
+            foreach (var element in jsonDocument.RootElement.EnumerateArray())
+            {
+                var evt = ConvertJsonToEvent(element);
+
+                list.Add(evt);
+            }
+            return list;
         }
 
-        [return: MaybeNull]
-        public static T FromXmlToEvent<T>(string xml) where T : class
+        private static Event ConvertJsonToEvent(JsonElement element)
         {
-            var serializer = new XmlSerializer(typeof(T));
-            using var reader = new StringReader(xml);
-            return serializer.Deserialize(reader) as T;
+            var type = element.GetProperty("type").GetString();
+            var elementJson = element.GetRawText();
+
+            return ConvertToEvent(type, elementJson);
         }
 
-        [return: MaybeNull]
-        public static List<Event> FromXmlToEventList(string xml)
+        public static Event ConvertJsonToEvent(string json)
         {
-            using var reader = new StringReader(xml);
-            return s_serializerList.Deserialize(reader) as List<Event>;
+            var jsonDocument = JsonDocument.Parse(json);
+
+            var type = jsonDocument.RootElement.GetProperty("type").GetString();
+            var elementJson = jsonDocument.RootElement.GetRawText();
+
+            return ConvertToEvent(type, elementJson);
+        }
+
+        private static Event ConvertToEvent(string? type, string elementJson)
+        {
+            Event? evt = type switch
+            {
+                nameof(DiceEvent) => JsonSerializer.Deserialize<DiceEvent>(elementJson),
+                nameof(GameDataEvent) => JsonSerializer.Deserialize<GameDataEvent>(elementJson),
+                _ => throw new Exception($"Unsupported json type {type}")
+            };
+
+            if (evt == null)
+            {
+                throw new Exception($"Cannot parse json type {type}");
+            }
+
+            return evt;
         }
     }
 }

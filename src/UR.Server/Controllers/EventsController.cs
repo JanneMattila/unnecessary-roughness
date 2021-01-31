@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using UR.Events;
@@ -12,6 +13,10 @@ namespace UR.Server.Controllers
     [Route("api/[controller]")]
     public class EventsController : Controller
     {
+#if DEBUG
+        private const string EVENTSTORE_FILENAME = "eventstore.json";
+#endif
+
         private static bool s_loaded;
         private static List<Event> s_events = new List<Event>();
 
@@ -27,57 +32,43 @@ namespace UR.Server.Controllers
 
 #if DEBUG
                 // Restore existing
-                if (System.IO.File.Exists("eventstore.xml"))
+                if (System.IO.File.Exists(EVENTSTORE_FILENAME))
                 {
-                    var serializer = new XmlSerializer(typeof(List<Event>));
-                    using var reader = System.IO.File.OpenRead("eventstore.xml");
-                    s_events = serializer.Deserialize(reader) as List<Event> ?? new List<Event>();
+                    var json = System.IO.File.ReadAllText(EVENTSTORE_FILENAME);
+                    s_events = Event.FromJsonToEventList(json);
                 }
-
-                // Override to be blank
-                //var serializer = new XmlSerializer(s_events.GetType());
-                //using (var writer = new StringWriter())
-                //{
-                //    serializer.Serialize(writer, s_events);
-                //}
 #endif
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<string> GetEvents(string id)
+        public string GetEvents(string id)
         {
-            var serializer = new XmlSerializer(s_events.GetType());
-            using (var writer = new StringWriter())
-            {
-                serializer.Serialize(writer, s_events);
-                await writer.FlushAsync();
-                return writer.ToString();
-            }
+            return JsonSerializer.Serialize(s_events);
         }
 
         [HttpPut("{id}")]
-        public async Task AppendEvent(string id, [FromBody] Event e)
+        public async Task AppendEvent(string id)
         {
-            s_events.Add(e);
+            using var reader = new StreamReader(Request.Body, Encoding.UTF8);
+            var json = await reader.ReadToEndAsync();
+
+            var evt = Event.ConvertJsonToEvent(json);
+            s_events.Add(evt);
 #if DEBUG
-            var serializer = new XmlSerializer(s_events.GetType());
-            using (var writer = System.IO.File.CreateText("eventstore.xml"))
-            {
-                serializer.Serialize(writer, s_events);
-            }
+            var eventsJson = JsonSerializer.Serialize(s_events);
+            await System.IO.File.WriteAllTextAsync(EVENTSTORE_FILENAME, eventsJson);
 #endif
-            await _hub.Clients.All.SendAsync(HubConstants.AppendEventMethod, e);
+            await _hub.Clients.All.SendAsync(HubConstants.AppendEventMethod, evt);
         }
 
         [HttpDelete]
-        public void DeleteState()
+        public async Task DeleteState()
         {
             s_events.Clear();
 #if DEBUG
-            var serializer = new XmlSerializer(s_events.GetType());
-            using var writer = System.IO.File.CreateText("eventstore.xml");
-            serializer.Serialize(writer, s_events);
+            var eventsJson = JsonSerializer.Serialize(s_events);
+            await System.IO.File.WriteAllTextAsync(EVENTSTORE_FILENAME, eventsJson);
 #endif
         }
     }

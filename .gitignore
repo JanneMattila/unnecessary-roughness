@@ -351,3 +351,4 @@ MigrationBackup/
 
 /src/UR.Server/Properties/ServiceDependencies/
 .config/
+/src/UR.Server/eventstore.json

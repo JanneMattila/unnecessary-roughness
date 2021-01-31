@@ -12,7 +12,7 @@ namespace UR
 
             var game = new Game()
             {
-                ID = Guid.NewGuid().ToString("B"),
+                ID = Guid.NewGuid().ToString("D"),
                 HomeTeam = homeTeam,
                 VisitorTeam = visitorTeam
             };
@@ -23,7 +23,7 @@ namespace UR
         {
             var team = new Team()
             {
-                ID = Guid.NewGuid().ToString("B"),
+                ID = Guid.NewGuid().ToString("D"),
                 Name = name,
                 Coach = new Coach()
                 {

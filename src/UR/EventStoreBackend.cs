@@ -16,14 +16,19 @@ namespace UR
 
         public async Task AppendEventAsync(string id, Event e)
         {
-            var xml = e.ToXml();
-            await HttpPutEventAsync(id, xml);
+            var json = e.ToJson();
+
+            Console.WriteLine("json:");
+            Console.WriteLine(json);
+
+
+            await HttpPutEventAsync(id, json);
         }
 
         public async Task<List<Event>> GetEventsAsync(string id)
         {
             var xml = await HttpGetEventsAsync(id);
-            return Event.FromXmlToEventList(xml) ?? new List<Event>();
+            return Event.FromJsonToEventList(xml) ?? new List<Event>();
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
+using System.Net.Mime;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -40,7 +42,7 @@ namespace UR.Client.Pages
 
                 var eventStore = new EventStoreBackend
                 {
-                    HttpPutEventAsync = async (id, e) => await Http.PutAsync($"api/Events/{id}", new StringContent(e, System.Text.Encoding.Unicode, "application/xml")),
+                    HttpPutEventAsync = async (id, e) => await Http.PutAsync($"api/Events/{id}", new StringContent(e, Encoding.UTF8, MediaTypeNames.Application.Json)),
                     HttpGetEventsAsync = async (id) => await Http.GetStringAsync($"api/Events/{id}")
                 };
 

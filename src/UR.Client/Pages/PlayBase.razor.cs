@@ -131,5 +131,12 @@ namespace UR.Client.Pages
             //_debug = $"{keyCode}";
             _stateHasChanged();
         }
+
+        [JSInvokable]
+        public static async void AppendEvent(string json)
+        {
+            await Task.CompletedTask;
+            _stateHasChanged();
+        }
     }
 }

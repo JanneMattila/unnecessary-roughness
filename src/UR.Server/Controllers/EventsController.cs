@@ -56,7 +56,10 @@ namespace UR.Server.Controllers
             var evt = Event.ConvertJsonToEvent(json);
             s_events.Add(evt);
 #if DEBUG
-            var eventsJson = JsonSerializer.Serialize(s_events);
+            var eventsJson = JsonSerializer.Serialize(s_events, new JsonSerializerOptions()
+            {
+                WriteIndented = true                
+            });
             await System.IO.File.WriteAllTextAsync(EVENTSTORE_FILENAME, eventsJson);
 #endif
             await _hub.Clients.All.SendAsync(HubConstants.AppendEventMethod, evt);

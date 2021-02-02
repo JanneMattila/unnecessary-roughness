@@ -17,11 +17,6 @@ namespace UR
         public async Task AppendEventAsync(string id, Event e)
         {
             var json = e.ToJson();
-
-            Console.WriteLine("json:");
-            Console.WriteLine(json);
-
-
             await HttpPutEventAsync(id, json);
         }
 

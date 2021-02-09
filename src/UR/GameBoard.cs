@@ -7,12 +7,10 @@ namespace UR
 {
     public static class GameBoard
     {
-        public const int BoardWidth = 15;
-        public const int BoardHeight = 26;
-        public const int BoardLeftWideZone = 4;
-        public const int BoardRightWideZone = 10;
-        public const int BoardTopHalf = 12;
-        public const int BoardBottomHalf = 13;
+        public const int BoardWidth = 25;
+        public const int BoardHeight = 50;
+        public const int BoardTopHalf = 24;
+        public const int BoardBottomHalf = 25;
 
         public static bool Scatter(DiceEvent d8event, int length, BoardPosition position)
         {

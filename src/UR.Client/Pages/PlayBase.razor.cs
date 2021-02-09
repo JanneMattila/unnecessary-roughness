@@ -117,8 +117,7 @@ namespace UR.Client.Pages
         [JSInvokable]
         public static async void CanvasClickReceived(int x, int y)
         {
-            await Task.CompletedTask;
-            //await _gameEngine.CanvasClickAsync(x, y);
+            await _gameEngine.CanvasClickAsync(x, y);
             _stateHasChanged();
         }
 
@@ -136,6 +135,12 @@ namespace UR.Client.Pages
         public static async void AppendEvent(string json)
         {
             await Task.CompletedTask;
+            _stateHasChanged();
+        }
+
+        protected async Task PlacingPlayers()
+        {
+            await _gameEngine.PlacingPlayers();
             _stateHasChanged();
         }
     }

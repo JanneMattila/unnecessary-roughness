@@ -23,6 +23,8 @@ namespace UR
         private string _currentTeam = string.Empty;
         private bool _isAnimationEnabled = false;
 
+        public Team CurrentTeam { get => _currentTeam == _game.HomeTeam.ID ? _game.HomeTeam : _game.VisitorTeam; }
+
         public Game Game => _game;
 
         [AllowNull]
@@ -63,6 +65,30 @@ namespace UR
                     else
                     {
                         HideElement(nameof(PlayerInformationVisibility));
+                    }
+                }
+            }
+        }
+
+        private bool _placingPlayersVisibility;
+        public bool PlacingPlayersVisibility
+        {
+            get
+            {
+                return _placingPlayersVisibility;
+            }
+            set
+            {
+                _placingPlayersVisibility = value;
+                if (_isAnimationEnabled)
+                {
+                    if (value)
+                    {
+                        ShowElement(nameof(PlacingPlayersVisibility), false);
+                    }
+                    else
+                    {
+                        HideElement(nameof(PlacingPlayersVisibility));
                     }
                 }
             }
@@ -110,6 +136,7 @@ namespace UR
                 await _eventStore.AppendEventAsync(_game.ID, events.First());
             }
 
+            UpdateBoardPositions();
             ExecuteDraw(_game);
         }
 
@@ -123,6 +150,14 @@ namespace UR
 
         public async Task ExecuteEventAsync(Event e)
         {
+            Console.Write(e);
+            if (e is GameDataEvent gameDataEvent)
+            {
+                _currentTeam = gameDataEvent.Game.HomeTeam.ID;
+                _gameState = GameState.PlacingPlayers;
+                PlacingPlayersVisibility = ElementVisibility.VisibilityNormal;
+            }
+
             await Task.CompletedTask;
         }
 
@@ -136,13 +171,13 @@ namespace UR
             _logger.Log(LogLevel.Trace, nameof(CanvasClickAsync));
 
             var selectedPlayer = GetBoardPosition(x, y);
+            _logger.Log(LogLevel.Trace, $"Player click: {selectedPlayer?.Name}");
+
             //FloodFillNodeScanCount = 0;
             //FloodFillNormalMovesCount = 0;
             //FloodFillExtraMovesCount = 0;
 
             PlayerInformationVisibility = ElementVisibility.VisibilityNone;
-
-            _logger.Log(LogLevel.Trace, $"_gameState: {_gameState}");
 
             if (_gameState == GameState.Kick)
             {
@@ -164,6 +199,38 @@ namespace UR
             }
         }
 
+        public async Task PlacingPlayers()
+        {
+            int lineOfScrimmageY;
+            if (_currentTeam == _game.HomeTeam.ID)
+            {
+                lineOfScrimmageY = GameBoard.BoardBottomHalf;
+            }
+            else
+            {
+                lineOfScrimmageY = GameBoard.BoardTopHalf;
+            }
+
+            var team = CurrentTeam;
+            if (ValidatePlacingPlayers(team, lineOfScrimmageY))
+            {
+                var placePlayersEvent = new PlacePlayersEvent()
+                {
+                    ID = Guid.NewGuid(),
+                    InitiatedBy = team.Coach.ID,
+                    Players = team.Players.ToList()
+                };
+
+                await ExecuteEventAsync(placePlayersEvent);
+                await _eventStore.AppendEventAsync(_game.ID, placePlayersEvent);
+            }
+        }
+
+        internal bool ValidatePlacingPlayers(Team currentTeam, int lineOfScrimmageY)
+        {
+            return true;
+        }
+
         private void UpdateBoardPositions()
         {
             var size = GameBoard.BoardWidth * GameBoard.BoardHeight;
@@ -182,6 +249,8 @@ namespace UR
 
         private void CanvasClickPlacingPlayers(int x, int y, Player selectedPlayer)
         {
+            _logger.Log(LogLevel.Trace, nameof(CanvasClickPlacingPlayers));
+
             ClearGameBoardSelection();
 
             if (selectedPlayer == null && _game.SelectedPlayer != null)
@@ -212,11 +281,15 @@ namespace UR
             }
             else if (selectedPlayer != null && _game.SelectedPlayer != selectedPlayer)
             {
+                _logger.Log(LogLevel.Trace, $"Select player {selectedPlayer?.Name}");
+
                 _game.SelectedPlayer = selectedPlayer;
                 PlayerInformationVisibility = ElementVisibility.VisibilityNormal;
             }
             else
             {
+                _logger.Log(LogLevel.Trace, $"Un-select player");
+
                 _game.SelectedPlayer = null;
             }
         }
@@ -366,6 +439,8 @@ namespace UR
 
         private void ClearGameBoardSelection()
         {
+            _logger.Log(LogLevel.Trace, nameof(ClearGameBoardSelection));
+
             _game.AvailableMoves.Clear();
             _game.SelectedMoves.Clear();
         }

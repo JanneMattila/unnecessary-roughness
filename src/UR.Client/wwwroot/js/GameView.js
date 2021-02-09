@@ -3,7 +3,6 @@ var _imagesToLoad = -1;
 var _images = {};
 var _IMAGE_BALL = 3;
 var _IMAGE_BALL_ANIMATION = 4;
-var _IMAGE_PLAYER1 = 0;
 var _FLOOR_SIZE = 34;
 var _animationRunning = false;
 var _animationUpdate = 0;
@@ -35,10 +34,10 @@ function loadImages() {
     }
 }
 loadImages();
-function drawPlayer(context, team, player, imageIndex, x, y, rotation, selectedPlayerX, selectedPlayerY) {
+function drawPlayer(context, team, player, x, y, rotation, selectedPlayerX, selectedPlayerY) {
     var imageName = player.position + "-" + team.image;
     var image = _images[imageName];
-    imageIndex = Math.floor(Math.random() * _imagesLoaded);
+    var imageIndex = Math.floor(Math.random() * _imagesLoaded);
     var offsetX = 2;
     var offsetY = 2;
     if (_animationPlayers !== undefined && _animationPlayers.length > 0) {
@@ -86,6 +85,7 @@ function drawPlayer(context, team, player, imageIndex, x, y, rotation, selectedP
     return false;
 }
 function showElement(id, modal) {
+    console.log("showElement: " + id);
     var element = document.getElementById(id);
     //let clientX = e.clientX || e.touches[0].clientX;
     //let clientY = e.clientY || e.touches[0].clientY;
@@ -96,7 +96,7 @@ function showElement(id, modal) {
     element.style.display = "";
     var y = window.scrollY;
     if (modal) {
-        var width = _canvasElement != undefined ? _canvasElement.width : 900;
+        var width = _canvasElement !== undefined ? _canvasElement.width : 900;
         var x = width / 2 - element.offsetWidth / 2;
         console.log("x: " + x);
         element.style.left = x + "px";
@@ -392,7 +392,7 @@ function drawCanvas(game) {
             var x = player.boardPosition.x;
             var y = player.boardPosition.y;
             if (x !== -1) {
-                var inAnimation = drawPlayer(_context, game.homeTeam, player, _IMAGE_PLAYER1, x, y, player.rotation, selectedPlayerX, selectedPlayerY);
+                var inAnimation = drawPlayer(_context, game.homeTeam, player, x, y, player.rotation, selectedPlayerX, selectedPlayerY);
                 if (inAnimation === false && x === game.ball.boardPosition.x && y === game.ball.boardPosition.y) {
                     ballInPlayersHands = true;
                 }
@@ -403,8 +403,8 @@ function drawCanvas(game) {
             var x = player.boardPosition.x;
             var y = player.boardPosition.y;
             if (x !== -1) {
-                var inAnimation = drawPlayer(_context, game.visitorTeam, player, _IMAGE_PLAYER1, x, y, player.rotation, selectedPlayerX, selectedPlayerY);
-                if (inAnimation === false && x === game.ball.boardPosition.x && y == game.ball.boardPosition.y) {
+                var inAnimation = drawPlayer(_context, game.visitorTeam, player, x, y, player.rotation, selectedPlayerX, selectedPlayerY);
+                if (inAnimation === false && x === game.ball.boardPosition.x && y === game.ball.boardPosition.y) {
                     ballInPlayersHands = true;
                 }
             }

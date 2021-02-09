@@ -1,6 +1,15 @@
 ﻿@page "/play/{GameID}"
 @inherits PlayBase
 
+<div id="PlacingPlayersVisibility" style="display:none" class="dialogdiv">
+    <div class="dialogtitlediv">
+        <text>@_gameEngine.CurrentTeam.Name places their players</text>
+    </div>
+    <div class="dialogcontentdiv">
+        <button class="btn" @onclick="PlacingPlayers">I'm done</button>
+    </div>
+</div>
+
 <div class="wrapper">
     <canvas id="canvas" class="canvas" @ref="_canvas" width="877" height="1752"></canvas>
 </div>

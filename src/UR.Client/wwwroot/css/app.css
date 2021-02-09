@@ -41,6 +41,28 @@ a, .btn-link {
     transform: translate(-50%, 0%);
 }
 
+.dialogdiv {
+    min-width: 300px;
+    padding: 0px;
+    position: absolute;
+    z-index: 100;
+    background-color: antiquewhite;
+    border: 1px solid rgba(0,0,0,0.4);
+    touch-action: none;
+}
+
+.dialogtitlediv {
+    padding: 10px;
+    cursor: move;
+    z-index: 10;
+    background-color: lightskyblue;
+    touch-action: none;
+}
+
+.dialogcontentdiv {
+    padding: 10px;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

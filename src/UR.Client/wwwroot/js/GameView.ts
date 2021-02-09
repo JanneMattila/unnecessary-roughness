@@ -5,7 +5,6 @@ const _images = {};
 const _IMAGE_BALL = 3;
 const _IMAGE_BALL_ANIMATION = 4;
 
-const _IMAGE_PLAYER1 = 0;
 
 const _FLOOR_SIZE = 34;
 
@@ -44,11 +43,11 @@ function loadImages() {
 
 loadImages();
 
-function drawPlayer(context, team, player, imageIndex, x, y, rotation, selectedPlayerX, selectedPlayerY) {
+function drawPlayer(context, team, player, x, y, rotation, selectedPlayerX, selectedPlayerY) {
 
     const imageName = `${player.position}-${team.image}`;
     const image = _images[imageName];
-    imageIndex = Math.floor(Math.random() * _imagesLoaded);
+    const imageIndex = Math.floor(Math.random() * _imagesLoaded);
     const offsetX = 2;
     const offsetY = 2;
     if (_animationPlayers !== undefined && _animationPlayers.length > 0) {
@@ -101,7 +100,8 @@ function drawPlayer(context, team, player, imageIndex, x, y, rotation, selectedP
 }
 
 function showElement(id: string, modal: boolean) {
-    let element = document.getElementById(id);
+    console.log("showElement: " + id);
+    const element = document.getElementById(id);
     //let clientX = e.clientX || e.touches[0].clientX;
     //let clientY = e.clientY || e.touches[0].clientY;
 
@@ -113,8 +113,8 @@ function showElement(id: string, modal: boolean) {
 
     let y = window.scrollY;
     if (modal) {
-        let width = _canvasElement != undefined ? _canvasElement.width : 900;
-        let x = width / 2 - element.offsetWidth / 2;
+        const width = _canvasElement !== undefined ? _canvasElement.width : 900;
+        const x = width / 2 - element.offsetWidth / 2;
         console.log("x: " + x);
 
         element.style.left = x + "px";
@@ -126,9 +126,9 @@ function showElement(id: string, modal: boolean) {
 }
 
 function scrollElement() {
-    for (let id in _scrollElements) {
-        let modal: boolean = _scrollElements[id];
-        let element = document.getElementById(id);
+    for (const id in _scrollElements) {
+        const modal: boolean = _scrollElements[id];
+        const element = document.getElementById(id);
         let y = window.scrollY;
         if (modal) {
             y += window.innerHeight / 2 - element.offsetHeight / 2;
@@ -476,7 +476,7 @@ function drawCanvas(game: any) {
             const x = player.boardPosition.x;
             const y = player.boardPosition.y;
             if (x !== -1) {
-                const inAnimation = drawPlayer(_context, game.homeTeam, player, _IMAGE_PLAYER1, x, y, player.rotation, selectedPlayerX, selectedPlayerY);
+                const inAnimation = drawPlayer(_context, game.homeTeam, player, x, y, player.rotation, selectedPlayerX, selectedPlayerY);
                 if (inAnimation === false && x === game.ball.boardPosition.x && y === game.ball.boardPosition.y) {
                     ballInPlayersHands = true;
                 }
@@ -489,8 +489,8 @@ function drawCanvas(game: any) {
             const y = player.boardPosition.y;
 
             if (x !== -1) {
-                const inAnimation = drawPlayer(_context, game.visitorTeam, player, _IMAGE_PLAYER1, x, y, player.rotation, selectedPlayerX, selectedPlayerY);
-                if (inAnimation === false && x === game.ball.boardPosition.x && y == game.ball.boardPosition.y) {
+                const inAnimation = drawPlayer(_context, game.visitorTeam, player, x, y, player.rotation, selectedPlayerX, selectedPlayerY);
+                if (inAnimation === false && x === game.ball.boardPosition.x && y === game.ball.boardPosition.y) {
                     ballInPlayersHands = true;
                 }
             }

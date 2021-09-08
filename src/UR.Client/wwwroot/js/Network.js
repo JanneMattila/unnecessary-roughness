@@ -1,6 +1,6 @@
 ﻿function appendEvents(json) {
     console.log("Network-appendEvents", json);
-    DotNet.invokeMethod("UR.Client", "AppendEvent", json);
+    DotNet.invokeMethod("UR.Client", "AppendEvent", JSON.stringify(json));
 }
 
 let connection = new signalR.HubConnectionBuilder()

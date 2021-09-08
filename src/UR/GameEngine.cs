@@ -56,7 +56,7 @@ namespace UR
             set
             {
                 _playerInformationVisibility = value;
-                if (_isAnimationEnabled)
+                if (!_isAnimationEnabled)
                 {
                     if (value)
                     {
@@ -80,7 +80,7 @@ namespace UR
             set
             {
                 _placingPlayersVisibility = value;
-                if (_isAnimationEnabled)
+                if (!_isAnimationEnabled)
                 {
                     if (value)
                     {
@@ -250,6 +250,7 @@ namespace UR
         private void CanvasClickPlacingPlayers(int x, int y, Player selectedPlayer)
         {
             _logger.Log(LogLevel.Trace, nameof(CanvasClickPlacingPlayers));
+            _logger.Log(LogLevel.Trace, $"Selected player {selectedPlayer?.Name} and {_game.SelectedPlayer?.Name}");
 
             ClearGameBoardSelection();
 
@@ -281,7 +282,7 @@ namespace UR
             }
             else if (selectedPlayer != null && _game.SelectedPlayer != selectedPlayer)
             {
-                _logger.Log(LogLevel.Trace, $"Select player {selectedPlayer?.Name}");
+                _logger.Log(LogLevel.Trace, $"Select2 player {selectedPlayer?.Name}");
 
                 _game.SelectedPlayer = selectedPlayer;
                 PlayerInformationVisibility = ElementVisibility.VisibilityNormal;
@@ -296,6 +297,8 @@ namespace UR
 
         private async Task CanvasClickNormalAsync(int x, int y, Player selectedPlayer)
         {
+            _logger.Log(LogLevel.Trace, nameof(CanvasClickNormalAsync));
+
             if (_game.SelectedPlayer != null && selectedPlayer == null)
             {
                 /*
@@ -431,7 +434,7 @@ namespace UR
 
                 PlayerInformationVisibility = ElementVisibility.VisibilityNormal;
                 ActionMenuVisibility = ElementVisibility.VisibilityNoneElement;
-                
+
                 ExecuteDraw(_game);
             }
             await Task.CompletedTask;

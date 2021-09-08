@@ -70,7 +70,7 @@ function drawPlayer(context, team, player, x, y, rotation, selectedPlayerX, sele
             }
         }
     }
-    
+
     if (x === selectedPlayerX && y === selectedPlayerY) {
         // Green
         context.save();

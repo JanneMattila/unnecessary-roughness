@@ -63,6 +63,7 @@ namespace UR
             team.Players.Add(new Player()
             {
                 ID = i.ToString(),
+                Name = $"Player {i} {position} - {team.Name}",
                 Position = position,
                 BoardPosition = new BoardPosition()
                 {

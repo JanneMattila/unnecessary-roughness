@@ -59,6 +59,7 @@ namespace UR.Events
             {
                 nameof(DiceEvent) => JsonSerializer.Deserialize<DiceEvent>(elementJson),
                 nameof(GameDataEvent) => JsonSerializer.Deserialize<GameDataEvent>(elementJson),
+                nameof(PlacePlayersEvent) => JsonSerializer.Deserialize<PlacePlayersEvent>(elementJson),
                 _ => throw new Exception($"Unsupported json type {type}")
             };
 

@@ -1,5 +1,5 @@
 ﻿function appendEvents(json) {
-    console.log("Network-appendEvents");
+    console.log("Network-appendEvents", json);
     DotNet.invokeMethod("UR.Client", "AppendEvent", json);
 }
 

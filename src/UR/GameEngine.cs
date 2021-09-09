@@ -258,6 +258,7 @@ namespace UR
             {
                 _boardPositions[player.BoardPosition.X + player.BoardPosition.Y * GameBoard.BoardWidth] = player;
             }
+            ExecuteDraw(_game);
         }
 
         private void CanvasClickPlacingPlayers(int x, int y, Player selectedPlayer)

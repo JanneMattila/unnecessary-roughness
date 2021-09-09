@@ -10,8 +10,9 @@ using UR.Server.Hubs;
 
 namespace UR.Server.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
-    public class EventsController : Controller
+    public class EventsController : ControllerBase
     {
 #if DEBUG
         private const string EVENTSTORE_FILENAME = "eventstore.json";

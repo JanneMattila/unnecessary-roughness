@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 namespace UR.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class RandomizerController : ControllerBase
     {
         private readonly ILogger<RandomizerController> _logger;

@@ -3,7 +3,8 @@
     public enum GameState
     {
         Initialization,
-        PlacingPlayers,
+        VisitorPlacingPlayers,
+        HomePlacingPlayers,
         Kick,
         Normal
     }

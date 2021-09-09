@@ -154,8 +154,21 @@ namespace UR
             if (e is GameDataEvent gameDataEvent)
             {
                 _currentTeam = gameDataEvent.Game.HomeTeam.ID;
-                _gameState = GameState.PlacingPlayers;
+                _gameState = GameState.VisitorPlacingPlayers;
                 PlacingPlayersVisibility = ElementVisibility.VisibilityNormal;
+            }
+            else if (e is PlacePlayersEvent)
+            {
+                if (_gameState == GameState.VisitorPlacingPlayers)
+                {
+                    _gameState = GameState.HomePlacingPlayers;
+                    _currentTeam = _game.HomeTeam.ID;
+                }
+                else if (_gameState == GameState.HomePlacingPlayers)
+                {
+                    _gameState = GameState.Normal;
+                    _currentTeam = _game.HomeTeam.ID;
+                }
             }
 
             await Task.CompletedTask;
@@ -189,13 +202,13 @@ namespace UR
                     Y = y
                 });
             }
-            else if (_gameState == GameState.PlacingPlayers)
-            {
-                CanvasClickPlacingPlayers(x, y, selectedPlayer);
-            }
             else if (_gameState == GameState.Normal)
             {
                 await CanvasClickNormalAsync(x, y, selectedPlayer);
+            }
+            else if (_gameState == GameState.VisitorPlacingPlayers || _gameState == GameState.HomePlacingPlayers)
+            {
+                CanvasClickPlacingPlayers(x, y, selectedPlayer);
             }
         }
 
@@ -250,39 +263,39 @@ namespace UR
         private void CanvasClickPlacingPlayers(int x, int y, Player selectedPlayer)
         {
             _logger.Log(LogLevel.Trace, nameof(CanvasClickPlacingPlayers));
-            _logger.Log(LogLevel.Trace, $"Selected player {selectedPlayer?.Name} and {_game.SelectedPlayer?.Name}");
+            _logger.Log(LogLevel.Trace, $"Selected player {selectedPlayer.Name} and {_game.SelectedPlayer.Name}");
 
             ClearGameBoardSelection();
 
-            if (selectedPlayer == null && _game.SelectedPlayer != null)
+            if (selectedPlayer == Player.Empty && _game.SelectedPlayer != Player.Empty)
             {
                 if (_currentTeam == _game.SelectedPlayer.Team)
                 {
                     // Can move only own players.
-                    if ((_currentTeam == _game.HomeTeam.ID && y >= GameBoard.BoardBottomHalf) ||
-                        (_currentTeam == _game.VisitorTeam.ID && y <= GameBoard.BoardTopHalf))
+                    if ((_currentTeam == _game.HomeTeam.ID && y <= GameBoard.BoardBottomHalf) ||
+                        (_currentTeam == _game.VisitorTeam.ID && y >= GameBoard.BoardTopHalf))
                     {
                         // Inside own side
                         _game.SelectedPlayer.BoardPosition.X = x;
                         _game.SelectedPlayer.BoardPosition.Y = y;
-                        _game.SelectedPlayer = null;
+                        _game.SelectedPlayer = Player.Empty;
 
                         UpdateBoardPositions();
                     }
                     else
                     {
                         // Trying to move outside own side.
-                        _game.SelectedPlayer = null;
+                        _game.SelectedPlayer = Player.Empty;
                     }
                 }
                 else
                 {
-                    _game.SelectedPlayer = null;
+                    _game.SelectedPlayer = Player.Empty;
                 }
             }
-            else if (selectedPlayer != null && _game.SelectedPlayer != selectedPlayer)
+            else if (selectedPlayer != Player.Empty && _game.SelectedPlayer != selectedPlayer)
             {
-                _logger.Log(LogLevel.Trace, $"Select2 player {selectedPlayer?.Name}");
+                _logger.Log(LogLevel.Trace, $"Select player {selectedPlayer?.Name}");
 
                 _game.SelectedPlayer = selectedPlayer;
                 PlayerInformationVisibility = ElementVisibility.VisibilityNormal;
@@ -291,7 +304,7 @@ namespace UR
             {
                 _logger.Log(LogLevel.Trace, $"Un-select player");
 
-                _game.SelectedPlayer = null;
+                _game.SelectedPlayer = Player.Empty;
             }
         }
 
@@ -392,7 +405,7 @@ namespace UR
             {
                 // Clear all selections
                 ClearGameBoardSelection();
-                _game.SelectedPlayer = null;
+                _game.SelectedPlayer = Player.Empty;
             }
             else
             {
@@ -420,7 +433,7 @@ namespace UR
                 var board = new int[GameBoard.BoardWidth * GameBoard.BoardHeight];
                 for (var i = 0; i < _boardPositions.Length; i++)
                 {
-                    board[i] = _boardPositions[i].IsEmpty() ? 1 : 0;
+                    board[i] = _boardPositions[i] == Player.Empty ? 1 : 0;
                 }
 
                 for (var i = 0; i < selectedPlayer.MovementLeft + 2; i++)

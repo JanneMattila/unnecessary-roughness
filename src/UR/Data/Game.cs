@@ -16,7 +16,7 @@ namespace UR.Data
 
         public Ball Ball { get; set; }
 
-        public Player? SelectedPlayer { get; set; }
+        public Player SelectedPlayer { get; set; }
 
         public List<BoardPosition> AvailableMoves { get; set; }
 
@@ -30,6 +30,7 @@ namespace UR.Data
             HomeTeam = new Team();
             VisitorTeam = new Team();
             Ball = new Ball();
+            SelectedPlayer = Player.Empty;
             Turn = 1;
             AvailableMoves = new List<BoardPosition>();
             AvailableExtraMoves = new List<BoardPosition>();

@@ -69,7 +69,8 @@ namespace UR
                 {
                     X = x,
                     Y = y
-                }
+                },
+                Team = team.ID
             });
         }
     }

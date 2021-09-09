@@ -8,7 +8,7 @@ namespace UR.Data
 
         public string Number { get; set; } = string.Empty;
 
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = "<Empty>";
 
         public string Position { get; set; } = string.Empty;
 
@@ -32,17 +32,6 @@ namespace UR.Data
 
         public string Team { get; set; } = string.Empty;
 
-        public static Player Empty
-        {
-            get
-            {
-                return new Player();
-            }
-        }
-
-        public bool IsEmpty()
-        {
-            return string.IsNullOrEmpty(ID);
-        }
+        public static readonly Player Empty = new();
     }
 }

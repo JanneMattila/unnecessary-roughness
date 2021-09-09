@@ -29,6 +29,7 @@ namespace UR
 
         [AllowNull]
         public Action<Game> ExecuteDraw;
+        private void Draw() => ExecuteDraw(_game);
 
         [AllowNull]
         public Action<ObjectAnimation[], ObjectAnimation> ExecuteAnimations;
@@ -137,7 +138,7 @@ namespace UR
             }
 
             UpdateBoardPositions();
-            ExecuteDraw(_game);
+            Draw();
         }
 
         public async Task SetEventsAsync(List<Event> events)
@@ -168,9 +169,11 @@ namespace UR
                 {
                     _gameState = GameState.Normal;
                     _currentTeam = _game.HomeTeam.ID;
+                    PlayerInformationVisibility = ElementVisibility.VisibilityNone;
                 }
             }
 
+            Draw();
             await Task.CompletedTask;
         }
 
@@ -183,7 +186,7 @@ namespace UR
         {
             _logger.Log(LogLevel.Trace, nameof(CanvasClickAsync));
 
-            var selectedPlayer = GetBoardPosition(x, y);
+            Player selectedPlayer = GetBoardPosition(x, y);
             _logger.Log(LogLevel.Trace, $"Player click: {selectedPlayer?.Name}");
 
             //FloodFillNodeScanCount = 0;
@@ -239,6 +242,17 @@ namespace UR
             }
         }
 
+        public async Task EndTurn()
+        {
+            var endTurnEvent = new EndTurnEvent()
+            {
+                ID = Guid.NewGuid(),
+                InitiatedBy = CurrentTeam.Coach.ID
+            };
+            await ExecuteEventAsync(endTurnEvent);
+            await _eventStore.AppendEventAsync(_game.ID, endTurnEvent);
+        }
+
         internal bool ValidatePlacingPlayers(Team currentTeam, int lineOfScrimmageY)
         {
             return true;
@@ -258,7 +272,7 @@ namespace UR
             {
                 _boardPositions[player.BoardPosition.X + player.BoardPosition.Y * GameBoard.BoardWidth] = player;
             }
-            ExecuteDraw(_game);
+            Draw();
         }
 
         private void CanvasClickPlacingPlayers(int x, int y, Player selectedPlayer)
@@ -313,7 +327,7 @@ namespace UR
         {
             _logger.Log(LogLevel.Trace, nameof(CanvasClickNormalAsync));
 
-            if (_game.SelectedPlayer != null && selectedPlayer == null)
+            if (_game.SelectedPlayer != Player.Empty && selectedPlayer == Player.Empty)
             {
                 /*
                 if (_game.SelectedPlayer.Team == CurrentTeam.ID)
@@ -402,7 +416,7 @@ namespace UR
                 }
                 */
             }
-            else if (selectedPlayer == _game.SelectedPlayer || selectedPlayer == null)
+            else if (selectedPlayer == _game.SelectedPlayer || selectedPlayer == Player.Empty)
             {
                 // Clear all selections
                 ClearGameBoardSelection();
@@ -434,7 +448,7 @@ namespace UR
                 var board = new int[GameBoard.BoardWidth * GameBoard.BoardHeight];
                 for (var i = 0; i < _boardPositions.Length; i++)
                 {
-                    board[i] = _boardPositions[i] == Player.Empty ? 1 : 0;
+                    board[i] = _boardPositions[i] == Player.Empty ? 0 : 1;
                 }
 
                 for (var i = 0; i < selectedPlayer.MovementLeft + 2; i++)
@@ -449,7 +463,7 @@ namespace UR
                 PlayerInformationVisibility = ElementVisibility.VisibilityNormal;
                 ActionMenuVisibility = ElementVisibility.VisibilityNoneElement;
 
-                ExecuteDraw(_game);
+                Draw();
             }
             await Task.CompletedTask;
         }

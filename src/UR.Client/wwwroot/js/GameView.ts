@@ -100,7 +100,7 @@ function drawPlayer(context, team, player, x, y, rotation, selectedPlayerX, sele
 }
 
 function showElement(id: string, modal: boolean) {
-    console.log("showElement: " + id);
+    //console.log("showElement: " + id);
     const element = document.getElementById(id);
     //let clientX = e.clientX || e.touches[0].clientX;
     //let clientY = e.clientY || e.touches[0].clientY;
@@ -372,7 +372,7 @@ function drawCanvas(game: any) {
 
     _game = game;
     // TODO: Analyze that do we get a lot of these draw commands.
-    //console.log(_game);
+    console.log(_game);
 
     if (_context === undefined) {
         return;

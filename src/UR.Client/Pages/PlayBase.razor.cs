@@ -143,5 +143,11 @@ namespace UR.Client.Pages
             await _gameEngine.PlacingPlayers();
             _stateHasChanged();
         }
+
+        protected async Task EndTurn()
+        {
+            await _gameEngine.EndTurn();
+            _stateHasChanged();
+        }
     }
 }

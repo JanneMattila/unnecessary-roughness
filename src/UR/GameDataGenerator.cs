@@ -70,6 +70,8 @@ namespace UR
                     X = x,
                     Y = y
                 },
+                MovementAllowance = 7,
+                MovementLeft = 7,
                 Team = team.ID
             });
         }

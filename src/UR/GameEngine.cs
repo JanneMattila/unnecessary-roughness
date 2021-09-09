@@ -95,6 +95,29 @@ namespace UR
             }
         }
 
+        private bool _endTurnVisibility;
+        public bool EndTurnVisibility
+        {
+            get
+            {
+                return _endTurnVisibility;
+            }
+            set
+            {
+                _endTurnVisibility = value;
+                if (!_isAnimationEnabled)
+                {
+                    if (value)
+                    {
+                        ShowElement(nameof(EndTurnVisibility), false);
+                    }
+                    else
+                    {
+                        HideElement(nameof(EndTurnVisibility));
+                    }
+                }
+            }
+        }
         public GameEngine(IBrowserLogger logger, Game game, IRandomizer randomizer, IEventStore eventStore)
         {
             _logger = logger;
@@ -169,12 +192,23 @@ namespace UR
                 {
                     _gameState = GameState.Normal;
                     _currentTeam = _game.HomeTeam.ID;
-                    PlayerInformationVisibility = ElementVisibility.VisibilityNone;
+                    PlacingPlayersVisibility = ElementVisibility.VisibilityNone;
+                    EndTurnVisibility = ElementVisibility.VisibilityNormal;
                 }
+            }
+            else if (e is EndTurnEvent)
+            {
+                SwapTeamTurn();
             }
 
             Draw();
             await Task.CompletedTask;
+        }
+
+        private void SwapTeamTurn()
+        {
+            _currentTeam = _currentTeam == _game.HomeTeam.ID ?
+                _game.VisitorTeam.ID : _game.HomeTeam.ID;
         }
 
         public Player GetBoardPosition(int x, int y)

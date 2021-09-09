@@ -9,6 +9,7 @@ namespace UR.Data
         public string ID { get; set; } = string.Empty;
 
         public string Image { get; set; } = string.Empty;
+        public string Logo { get; set; } = string.Empty;
 
         public string Name { get; set; } = string.Empty;
 

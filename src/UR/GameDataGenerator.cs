@@ -7,8 +7,8 @@ namespace UR
     {
         public Game NewGame()
         {
-            var homeTeam = CreateTeam("Best blue team", "blue", true);
-            var visitorTeam = CreateTeam("Best red team", "red", false);
+            var homeTeam = CreateTeam("Blue team", "blue", "/images/themes/basic/forward-blue.png", true);
+            var visitorTeam = CreateTeam("Red team", "red", "/images/themes/basic/forward-red.png", false);
 
             var game = new Game()
             {
@@ -19,13 +19,14 @@ namespace UR
             return game;
         }
 
-        private static Team CreateTeam(string name, string color, bool upperHalf)
+        private static Team CreateTeam(string name, string image, string logo, bool upperHalf)
         {
             var team = new Team()
             {
                 ID = Guid.NewGuid().ToString("D"),
                 Name = name,
-                Image = color,
+                Image = image,
+                Logo = logo,
                 Coach = new Coach()
                 {
                     ID = Guid.NewGuid()

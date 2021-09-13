@@ -4,6 +4,27 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+.welcome {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(64,64,64,0.6);
+    backdrop-filter: blur(6px);
+    display: table;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.welcome-Text {
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    display: table-cell;
+    color: white;
+}
+
 a, .btn-link {
     color: #0366d6;
 }

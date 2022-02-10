@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Cryptography;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Security.Cryptography;
 
 namespace UR.Server.Controllers
 {
@@ -12,34 +12,32 @@ namespace UR.Server.Controllers
 
         public RandomizerController(ILogger<RandomizerController> logger)
         {
-           _logger = logger;
+            _logger = logger;
         }
 
         private int[] RollDice(int sides, int count)
         {
             var results = new int[count];
             var sidesRange = (byte.MaxValue / sides) * sides;
-            using (var provider = new RNGCryptoServiceProvider())
-            {
-                var buffer = new byte[1];
-                for (var i = 0; i < count; i++)
-                {
-                    provider.GetBytes(buffer);
 
-                    // Provide equal range value opportunity for the dice sides.
-                    if (sidesRange < buffer[0])
-                    {
-                        // Outside range so we must re-roll this result
-                        i--;
-                    }
-                    else
-                    {
-                        // Under the range so equal share means equal odds.
-                        results[i] = (((int)buffer[0]) % sides) + 1;
-                    }
+            using var provider = RandomNumberGenerator.Create();
+            var buffer = new byte[1];
+            for (var i = 0; i < count; i++)
+            {
+                provider.GetBytes(buffer);
+
+                // Provide equal range value opportunity for the dice sides.
+                if (sidesRange < buffer[0])
+                {
+                    // Outside range so we must re-roll this result
+                    i--;
+                }
+                else
+                {
+                    // Under the range so equal share means equal odds.
+                    results[i] = (((int)buffer[0]) % sides) + 1;
                 }
             }
-
             return results;
         }
 

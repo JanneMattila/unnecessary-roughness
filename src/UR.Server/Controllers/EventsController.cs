@@ -59,7 +59,7 @@ namespace UR.Server.Controllers
 #if DEBUG
             var eventsJson = JsonSerializer.Serialize(s_events, new JsonSerializerOptions()
             {
-                WriteIndented = true                
+                WriteIndented = true
             });
             await System.IO.File.WriteAllTextAsync(EVENTSTORE_FILENAME, eventsJson);
 #endif
@@ -73,6 +73,8 @@ namespace UR.Server.Controllers
 #if DEBUG
             var eventsJson = JsonSerializer.Serialize(s_events);
             await System.IO.File.WriteAllTextAsync(EVENTSTORE_FILENAME, eventsJson);
+#else
+            await Task.CompletedTask;
 #endif
         }
     }

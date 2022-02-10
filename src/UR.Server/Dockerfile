@@ -1,15 +1,17 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 # 1. Build image(https://hub.docker.com/_/microsoft-dotnet-core-sdk/)
-FROM mcr.microsoft.com/dotnet/aspnet:5.0.9-focal-amd64 AS base
+# https://hub.docker.com/_/microsoft-dotnet-aspnet/
+FROM mcr.microsoft.com/dotnet/aspnet:6.0.2-alpine3.14-amd64 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0.400-focal-amd64 AS build
+# https://hub.docker.com/_/microsoft-dotnet-sdk/
+FROM mcr.microsoft.com/dotnet/sdk:6.0.102-alpine3.14-amd64 AS build
 
 WORKDIR /node
-ENV NODE_VERSION 12.19.0
+ENV NODE_VERSION 16.14.0
 RUN apt-get update -qq && \
     apt-get dist-upgrade --no-install-recommends -y && \
     apt-get install -y --no-install-recommends xz-utils

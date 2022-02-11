@@ -48,7 +48,7 @@ jobs:
             ${{ env.repository }}:${{ env.image }}
 
       - name: Login to Azure
-        uses: azure/login
+        uses: azure/login@v1
         if: github.event_name == 'push'
         with:
           client-id: ${{ secrets.AZURE_CLIENTID }}

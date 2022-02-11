@@ -2,13 +2,13 @@
 
 # 1. Build image(https://hub.docker.com/_/microsoft-dotnet-core-sdk/)
 # https://hub.docker.com/_/microsoft-dotnet-aspnet/
-FROM mcr.microsoft.com/dotnet/aspnet:6.0.2-focal-amd64 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0.2-bullseye-slim-amd64 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
 # https://hub.docker.com/_/microsoft-dotnet-sdk/
-FROM mcr.microsoft.com/dotnet/sdk:6.0.102-focal-amd64 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0.102-bullseye-slim-amd64 AS build
 
 WORKDIR /node
 ENV NODE_VERSION 16.14.0

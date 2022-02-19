@@ -1,0 +1,20 @@
+﻿.menu {
+    position: absolute;
+    top: 32px;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(64,64,64,0.6);
+    backdrop-filter: blur(6px);
+    display: table;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.menu-Area {
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    display: table-cell;
+    color: white;
+}

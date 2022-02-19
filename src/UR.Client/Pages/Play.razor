@@ -1,6 +1,23 @@
 ﻿@page "/play/{GameID}"
 @inherits PlayBase
 
+@if(IsMenuOpen)
+{
+<div class="menu">
+	<div class="menu-Area">
+        <img src="images/apple-touch-icon.png" />
+        <br />
+        Loading...
+	</div>
+
+    <img src="/images/menu-close.png" @onclick="Menu" class="menu-button" />
+</div>
+}
+else
+{
+<img src="/images/menu.png" @onclick="Menu" class="menu-button" />
+}
+
 <div id="PlacingPlayersVisibility" style="display:none" class="dialogdiv">
     <div class="dialogtitlediv">
         <text><img src="@_gameEngine.CurrentTeam.Logo" /> @_gameEngine.CurrentTeam.Name: Place your players</text>

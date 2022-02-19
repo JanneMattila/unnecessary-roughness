@@ -29,13 +29,13 @@ function loadImages() {
         img.onload = function () {
             _imagesLoaded++;
         };
-        img.src = "/images/themes/" + theme + "/" + file + ".png";
+        img.src = "/images/themes/".concat(theme, "/").concat(file, ".png");
         _images[file] = img;
     }
 }
 loadImages();
 function drawPlayer(context, team, player, x, y, rotation, selectedPlayerX, selectedPlayerY) {
-    var imageName = player.position + "-" + team.image;
+    var imageName = "".concat(player.position, "-").concat(team.image);
     var image = _images[imageName];
     var imageIndex = Math.floor(Math.random() * _imagesLoaded);
     var offsetX = 2;

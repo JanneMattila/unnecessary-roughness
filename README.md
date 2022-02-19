@@ -2,8 +2,7 @@
 
 ## Build Status
 
-[![Build Status](https://dev.azure.com/jannemattila/jannemattila/_apis/build/status/JanneMattila.unnecessary-roughness?branchName=master)](https://dev.azure.com/jannemattila/jannemattila/_build/latest?definitionId=53&branchName=master)
-
+[![CICD](https://github.com/JanneMattila/unnecessary-roughness/actions/workflows/CICD.yaml/badge.svg)](https://github.com/JanneMattila/unnecessary-roughness/actions/workflows/CICD.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Introduction

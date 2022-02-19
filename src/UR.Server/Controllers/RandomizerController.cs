@@ -1,52 +1,50 @@
 ﻿using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
-namespace UR.Server.Controllers
+namespace UR.Server.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class RandomizerController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class RandomizerController : ControllerBase
+    private readonly ILogger<RandomizerController> _logger;
+
+    public RandomizerController(ILogger<RandomizerController> logger)
     {
-        private readonly ILogger<RandomizerController> _logger;
+        _logger = logger;
+    }
 
-        public RandomizerController(ILogger<RandomizerController> logger)
+    private int[] RollDice(int sides, int count)
+    {
+        var results = new int[count];
+        var sidesRange = (byte.MaxValue / sides) * sides;
+
+        using var provider = RandomNumberGenerator.Create();
+        var buffer = new byte[1];
+        for (var i = 0; i < count; i++)
         {
-            _logger = logger;
-        }
+            provider.GetBytes(buffer);
 
-        private int[] RollDice(int sides, int count)
-        {
-            var results = new int[count];
-            var sidesRange = (byte.MaxValue / sides) * sides;
-
-            using var provider = RandomNumberGenerator.Create();
-            var buffer = new byte[1];
-            for (var i = 0; i < count; i++)
+            // Provide equal range value opportunity for the dice sides.
+            if (sidesRange < buffer[0])
             {
-                provider.GetBytes(buffer);
-
-                // Provide equal range value opportunity for the dice sides.
-                if (sidesRange < buffer[0])
-                {
-                    // Outside range so we must re-roll this result
-                    i--;
-                }
-                else
-                {
-                    // Under the range so equal share means equal odds.
-                    results[i] = (((int)buffer[0]) % sides) + 1;
-                }
+                // Outside range so we must re-roll this result
+                i--;
             }
-            return results;
+            else
+            {
+                // Under the range so equal share means equal odds.
+                results[i] = (((int)buffer[0]) % sides) + 1;
+            }
         }
+        return results;
+    }
 
-        [HttpGet("[action]/{id}/{type}/{count}")]
-        public int[] Get(string id, int sides, int count)
-        {
-            // TODO: Add eventing
-            var dices = RollDice(sides, count);
-            return dices;
-        }
+    [HttpGet("[action]/{id}/{type}/{count}")]
+    public int[] Get(string id, int sides, int count)
+    {
+        // TODO: Add eventing
+        var dices = RollDice(sides, count);
+        return dices;
     }
 }

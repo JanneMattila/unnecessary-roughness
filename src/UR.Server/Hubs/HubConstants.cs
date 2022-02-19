@@ -1,7 +1,6 @@
-﻿namespace UR.Server.Hubs
+﻿namespace UR.Server.Hubs;
+
+public static class HubConstants
 {
-    public static class HubConstants
-    {
-        public const string AppendEventMethod = "AppendEvent";
-    }
+    public const string AppendEventMethod = "AppendEvent";
 }

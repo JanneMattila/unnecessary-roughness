@@ -94,12 +94,10 @@ function showElement(id, modal) {
     //startX = clientX;
     //startY = clientY;
     element.style.display = "";
+    var x = window.innerWidth / 2 - element.offsetWidth / 2;
+    element.style.left = x + "px";
     var y = window.scrollY;
     if (modal) {
-        var width = _canvasElement !== undefined ? _canvasElement.width : 900;
-        var x = width / 2 - element.offsetWidth / 2;
-        console.log("x: " + x);
-        element.style.left = x + "px";
         y += window.innerHeight / 2 - element.offsetHeight / 2;
     }
     element.style.top = y + "px";

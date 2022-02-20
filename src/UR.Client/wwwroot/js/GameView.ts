@@ -111,13 +111,10 @@ function showElement(id: string, modal: boolean) {
     //startY = clientY;
     element.style.display = "";
 
+    const x = window.innerWidth / 2 - element.offsetWidth / 2;
+    element.style.left = x + "px";
     let y = window.scrollY;
     if (modal) {
-        const width = _canvasElement !== undefined ? _canvasElement.width : 900;
-        const x = width / 2 - element.offsetWidth / 2;
-        console.log("x: " + x);
-
-        element.style.left = x + "px";
 
         y += window.innerHeight / 2 - element.offsetHeight / 2;
     }

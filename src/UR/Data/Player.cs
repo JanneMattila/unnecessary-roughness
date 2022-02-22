@@ -29,6 +29,4 @@ public class Player
     public List<string> Skills { get; set; } = new();
 
     public string Team { get; set; } = string.Empty;
-
-    public static readonly Player Empty = new();
 }

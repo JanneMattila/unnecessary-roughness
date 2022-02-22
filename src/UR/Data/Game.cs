@@ -5,36 +5,21 @@ namespace UR.Data;
 public class Game
 {
     [JsonPropertyName("id")]
-    public string ID { get; set; }
+    public string ID { get; set; } = string.Empty;
 
-    public int Turn { get; set; }
+    public int Turn { get; set; } = 1;
 
-    public Team HomeTeam { get; set; }
+    public Team HomeTeam { get; set; } = new();
 
-    public Team VisitorTeam { get; set; }
+    public Team VisitorTeam { get; set; } = new();
 
-    public Ball Ball { get; set; }
+    public Ball Ball { get; set; } = new();
 
-    public Player SelectedPlayer { get; set; }
+    public Player? SelectedPlayer { get; set; }
 
-    public List<BoardPosition> AvailableMoves { get; set; }
+    public List<BoardPosition> AvailableMoves { get; set; } = new();
 
-    public List<BoardPosition> AvailableExtraMoves { get; set; }
-
-    public List<BoardPosition> SelectedMoves { get; set; }
-
-    public Game()
-    {
-        ID = string.Empty;
-        HomeTeam = new Team();
-        VisitorTeam = new Team();
-        Ball = new Ball();
-        SelectedPlayer = Player.Empty;
-        Turn = 1;
-        AvailableMoves = new List<BoardPosition>();
-        AvailableExtraMoves = new List<BoardPosition>();
-        SelectedMoves = new List<BoardPosition>();
-    }
+    public List<BoardPosition> SelectedMoves { get; set; } = new();
 
     public void SetPlayersToDefaultLocations()
     {

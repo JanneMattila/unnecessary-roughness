@@ -327,19 +327,11 @@ function drawCanvas(game) {
         for (var x = 0; x < width; x++) {
             for (var y = 0; y < height; y++) {
                 var availableMovementSelection = false;
-                var availableExtraMovementSelection = false;
                 var selectedMovementSelection = false;
                 for (var m = 0; m < game.availableMoves.length; m++) {
                     var move = game.availableMoves[m];
                     if (move.x === x && move.y === y) {
                         availableMovementSelection = true;
-                        break;
-                    }
-                }
-                for (var m = 0; m < game.availableExtraMoves.length; m++) {
-                    var move = game.availableExtraMoves[m];
-                    if (move.x === x && move.y === y) {
-                        availableExtraMovementSelection = true;
                         break;
                     }
                 }
@@ -363,15 +355,6 @@ function drawCanvas(game) {
                     // Yellow
                     _context.save();
                     _context.fillStyle = "rgba(255,255,153, 0.3)";
-                    _context.beginPath();
-                    _context.fillRect(x * _FLOOR_SIZE, y * _FLOOR_SIZE, _FLOOR_SIZE, _FLOOR_SIZE);
-                    _context.fill();
-                    _context.restore();
-                }
-                else if (availableExtraMovementSelection) {
-                    // Red
-                    _context.save();
-                    _context.fillStyle = "rgba(240,128,128, 0.3)";
                     _context.beginPath();
                     _context.fillRect(x * _FLOOR_SIZE, y * _FLOOR_SIZE, _FLOOR_SIZE, _FLOOR_SIZE);
                     _context.fill();

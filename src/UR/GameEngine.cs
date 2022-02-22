@@ -207,7 +207,7 @@ public class GameEngine
             _game.VisitorTeam.ID : _game.HomeTeam.ID;
     }
 
-    public Player GetBoardPosition(int x, int y)
+    public Player GetPlayerFromBoardPosition(int x, int y)
     {
         return _boardPositions[x + y * GameBoard.BoardWidth];
     }
@@ -216,7 +216,7 @@ public class GameEngine
     {
         _logger.Log(LogLevel.Trace, nameof(CanvasClickAsync));
 
-        Player selectedPlayer = GetBoardPosition(x, y);
+        Player selectedPlayer = GetPlayerFromBoardPosition(x, y);
         _logger.Log(LogLevel.Trace, $"Player click: {selectedPlayer?.Name}");
 
         //FloodFillNodeScanCount = 0;
@@ -359,7 +359,6 @@ public class GameEngine
 
         if (_game.SelectedPlayer != Player.Empty && selectedPlayer == Player.Empty)
         {
-            /*
             if (_game.SelectedPlayer.Team == CurrentTeam.ID)
             {
                 var targetIndex = x + y * GameBoard.BoardWidth;
@@ -371,7 +370,7 @@ public class GameEngine
                     var moves = _game.SelectedMoves.ToList();
                     ClearGameBoardSelection();
 
-                    var playerMoveEvent = new PlayerMoveEvent()
+                    var playerMoveEvent = new MovePlayerEvent()
                     {
                         ID = Guid.NewGuid(),
                         PlayerID = _game.SelectedPlayer.ID,
@@ -379,7 +378,7 @@ public class GameEngine
                         Moves = moves
                     };
 
-                    Status = $"{_game.SelectedPlayer.Name} is on the run.";
+                    //Status = $"{_game.SelectedPlayer.Name} is on the run.";
                     await ExecuteEventAsync(playerMoveEvent);
                     await _eventStore.AppendEventAsync(_game.ID, playerMoveEvent);
                 }
@@ -407,22 +406,22 @@ public class GameEngine
                         var newPositions = new List<ShortestPathNode>();
                         var startPosition = new BoardPosition() { X = playerX, Y = playerY };
                         var previousPositions = new List<ShortestPathNode>
-                    {
-                        new ShortestPathNode()
                         {
-                            Position = startPosition,
-                            Path = new List<BoardPosition>() { startPosition }
-                        }
-                    };
+                            new ShortestPathNode()
+                            {
+                                Position = startPosition,
+                                Path = new List<BoardPosition>() { startPosition }
+                            }
+                        };
 
                         var board = new int[GameBoard.BoardWidth * GameBoard.BoardHeight];
                         const int max = 99999;
                         for (var i = 0; i < _boardPositions.Length; i++)
                         {
-                            board[i] = _boardPositions[i] != null ? -1 : max;
+                            board[i] = _boardPositions[i] != Player.Empty ? -1 : max;
                         }
 
-                        for (var i = 0; i < _game.SelectedPlayer.MovementLeft + 2; i++)
+                        for (var i = 0; i < _game.SelectedPlayer.MovementLeft; i++)
                         {
                             ShortestPath(null, board, previousPositions, newPositions, playerX, playerY, _game.SelectedPlayer.MovementLeft + 2 - i + 1, availableMoves, availableExtraMoves);
                             previousPositions = newPositions;
@@ -444,7 +443,7 @@ public class GameEngine
                     }
                 }
             }
-            */
+            Draw();
         }
         else if (selectedPlayer == _game.SelectedPlayer || selectedPlayer == Player.Empty)
         {
@@ -550,7 +549,7 @@ public class GameEngine
         }
     }
 
-    private void ShortestPath(ShortestPathNode scanPosition, int[] board, List<ShortestPathNode> previousPositions, List<ShortestPathNode> newPositions, int x, int y, int movement, List<BoardPosition> availableMoves, List<BoardPosition> availableExtraMoves)
+    private void ShortestPath(ShortestPathNode? scanPosition, int[] board, List<ShortestPathNode> previousPositions, List<ShortestPathNode> newPositions, int x, int y, int movement, List<BoardPosition> availableMoves, List<BoardPosition> availableExtraMoves)
     {
         if (scanPosition == null)
         {

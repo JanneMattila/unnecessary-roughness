@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using UR.Data;
+﻿using UR.Data;
 
-namespace UR
+namespace UR;
+
+public class ShortestPathNode
 {
-    public class ShortestPathNode
-    {
-        public BoardPosition Position { get; set; } = new();
-        public List<BoardPosition> Path { get; set; } = new();
-    }
+    public BoardPosition Position { get; set; } = new();
+    public List<BoardPosition> Path { get; set; } = new();
 }

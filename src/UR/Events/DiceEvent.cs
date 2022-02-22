@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace UR.Events
+namespace UR.Events;
+
+public class DiceEvent : Event
 {
-    public class DiceEvent : Event
-    {
-        [JsonPropertyName("dices")]
-        public List<string> Dices { get; set; } = new();
-    }
+    [JsonPropertyName("dices")]
+    public List<string> Dices { get; set; } = new();
 }

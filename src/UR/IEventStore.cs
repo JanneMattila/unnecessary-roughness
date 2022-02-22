@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using UR.Events;
+﻿using UR.Events;
 
-namespace UR
+namespace UR;
+
+public interface IEventStore
 {
-    public interface IEventStore
-    {
-        Task<List<Event>> GetEventsAsync(string id);
+    Task<List<Event>> GetEventsAsync(string id);
 
-        Task AppendEventAsync(string id, Event e);
-    }
+    Task AppendEventAsync(string id, Event e);
 }

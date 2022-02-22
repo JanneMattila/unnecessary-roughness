@@ -1,65 +1,63 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace UR.Data
+namespace UR.Data;
+
+public class Game
 {
-    public class Game
+    [JsonPropertyName("id")]
+    public string ID { get; set; }
+
+    public int Turn { get; set; }
+
+    public Team HomeTeam { get; set; }
+
+    public Team VisitorTeam { get; set; }
+
+    public Ball Ball { get; set; }
+
+    public Player SelectedPlayer { get; set; }
+
+    public List<BoardPosition> AvailableMoves { get; set; }
+
+    public List<BoardPosition> AvailableExtraMoves { get; set; }
+
+    public List<BoardPosition> SelectedMoves { get; set; }
+
+    public Game()
     {
-        [JsonPropertyName("id")]
-        public string ID { get; set; }
+        ID = string.Empty;
+        HomeTeam = new Team();
+        VisitorTeam = new Team();
+        Ball = new Ball();
+        SelectedPlayer = Player.Empty;
+        Turn = 1;
+        AvailableMoves = new List<BoardPosition>();
+        AvailableExtraMoves = new List<BoardPosition>();
+        SelectedMoves = new List<BoardPosition>();
+    }
 
-        public int Turn { get; set; }
-
-        public Team HomeTeam { get; set; }
-
-        public Team VisitorTeam { get; set; }
-
-        public Ball Ball { get; set; }
-
-        public Player SelectedPlayer { get; set; }
-
-        public List<BoardPosition> AvailableMoves { get; set; }
-
-        public List<BoardPosition> AvailableExtraMoves { get; set; }
-
-        public List<BoardPosition> SelectedMoves { get; set; }
-
-        public Game()
+    public void SetPlayersToDefaultLocations()
+    {
+        var x = 2;
+        foreach (var player in HomeTeam.Players)
         {
-            ID = string.Empty;
-            HomeTeam = new Team();
-            VisitorTeam = new Team();
-            Ball = new Ball();
-            SelectedPlayer = Player.Empty;
-            Turn = 1;
-            AvailableMoves = new List<BoardPosition>();
-            AvailableExtraMoves = new List<BoardPosition>();
-            SelectedMoves = new List<BoardPosition>();
+            player.Rotation = 0;
+            player.BoardPosition = new BoardPosition()
+            {
+                X = x++,
+                Y = 13
+            };
         }
 
-        public void SetPlayersToDefaultLocations()
+        x = 2;
+        foreach (var player in VisitorTeam.Players)
         {
-            var x = 2;
-            foreach (var player in HomeTeam.Players)
+            player.Rotation = 270; // Look down
+            player.BoardPosition = new BoardPosition()
             {
-                player.Rotation = 0;
-                player.BoardPosition = new BoardPosition()
-                {
-                    X = x++,
-                    Y = 13
-                };
-            }
-
-            x = 2;
-            foreach (var player in VisitorTeam.Players)
-            {
-                player.Rotation = 270; // Look down
-                player.BoardPosition = new BoardPosition()
-                {
-                    X = x++,
-                    Y = 12
-                };
-            }
+                X = x++,
+                Y = 12
+            };
         }
     }
 }

@@ -1,9 +1,6 @@
-﻿using System;
+﻿namespace UR.Data;
 
-namespace UR.Data
+public class Coach
 {
-    public class Coach
-    {
-        public Guid ID { get; set; }
-    }
+    public Guid ID { get; set; }
 }

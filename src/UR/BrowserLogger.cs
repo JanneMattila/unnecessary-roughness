@@ -1,13 +1,11 @@
-﻿using System;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
-namespace UR
+namespace UR;
+
+public class BrowserLogger : IBrowserLogger
 {
-    public class BrowserLogger : IBrowserLogger
+    public void Log(LogLevel logLevel, string logMessage)
     {
-        public void Log(LogLevel logLevel, string logMessage)
-        {
-            Console.WriteLine($"{logLevel}: {logMessage}");
-        }
+        Console.WriteLine($"{logLevel}: {logMessage}");
     }
 }

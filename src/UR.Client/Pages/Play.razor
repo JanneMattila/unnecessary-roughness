@@ -1,4 +1,5 @@
 ﻿@page "/play/{GameID}"
+@using UR.Client.Components
 @inherits PlayBase
 
 <img src="/images/menu.png" @onclick="Menu" class="menu-button" />
@@ -12,6 +13,8 @@
 	</div>
 
     <img src="/images/menu-close.png" @onclick="Menu" class="menu-button" />
+
+    <Dice Number="56" />
 </div>
 }
 

@@ -1,19 +1,17 @@
-﻿using System.Collections.Generic;
-using UR.Data;
+﻿using UR.Data;
 
-namespace UR.Animation
+namespace UR.Animation;
+
+public class ObjectAnimation
 {
-    public class ObjectAnimation
-    {
-        public string ID { get; set; } = string.Empty;
-        public int Index { get; set; }
+    public string ID { get; set; } = string.Empty;
+    public int Index { get; set; }
 
-        public BoardPosition Position { get; set; } = new();
+    public BoardPosition Position { get; set; } = new();
 
-        public int Rotation { get; set; }
+    public int Rotation { get; set; }
 
-        public double StartTime { get; set; }
+    public double StartTime { get; set; }
 
-        public List<AnimationMove> Animations { get; set; } = new();
-    }
+    public List<AnimationMove> Animations { get; set; } = new();
 }

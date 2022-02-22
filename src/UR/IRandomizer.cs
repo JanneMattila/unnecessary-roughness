@@ -1,10 +1,8 @@
-﻿using System.Threading.Tasks;
-using UR.Events;
+﻿using UR.Events;
 
-namespace UR
+namespace UR;
+
+public interface IRandomizer
 {
-    public interface IRandomizer
-    {
-        Task<DiceEvent> GetDicesAsync(string id, string type, int count);
-    }
+    Task<DiceEvent> GetDicesAsync(string id, string type, int count);
 }

@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace UR
+namespace UR;
+
+public interface IBrowserLogger
 {
-    public interface IBrowserLogger
-    {
-        void Log(LogLevel logLevel, string logMessage);
-    }
+    void Log(LogLevel logLevel, string logMessage);
 }

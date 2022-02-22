@@ -1,17 +1,16 @@
-﻿namespace UR.Data
-{
-    public class Ball
-    {
-        public BoardPosition BoardPosition { get; set; }
+﻿namespace UR.Data;
 
-        public Ball()
+public class Ball
+{
+    public BoardPosition BoardPosition { get; set; }
+
+    public Ball()
+    {
+        // Default to be out of bounds
+        BoardPosition = new BoardPosition()
         {
-            // Default to be out of bounds
-            BoardPosition = new BoardPosition()
-            {
-                X = -1,
-                Y = -1
-            };
-        }
+            X = -1,
+            Y = -1
+        };
     }
 }

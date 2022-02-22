@@ -1,11 +1,10 @@
-﻿namespace UR
+﻿namespace UR;
+
+public enum GameState
 {
-    public enum GameState
-    {
-        Initialization,
-        VisitorPlacingPlayers,
-        HomePlacingPlayers,
-        Kick,
-        Normal
-    }
+    Initialization,
+    VisitorPlacingPlayers,
+    HomePlacingPlayers,
+    Kick,
+    Normal
 }

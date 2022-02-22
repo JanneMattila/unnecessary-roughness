@@ -1,6 +1,7 @@
 ﻿@page "/play/{GameID}"
 @inherits PlayBase
 
+<img src="/images/menu.png" @onclick="Menu" class="menu-button" />
 @if(IsMenuOpen)
 {
 <div class="menu">
@@ -12,10 +13,6 @@
 
     <img src="/images/menu-close.png" @onclick="Menu" class="menu-button" />
 </div>
-}
-else
-{
-<img src="/images/menu.png" @onclick="Menu" class="menu-button" />
 }
 
 <div id="PlacingPlayersVisibility" style="display:none" class="dialogdiv">

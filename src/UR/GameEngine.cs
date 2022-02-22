@@ -203,12 +203,13 @@ public class GameEngine
 
     private void SwapTeamTurn()
     {
+        _logger.Log(LogLevel.Trace, nameof(SwapTeamTurn));
+
         _currentTeam = _currentTeam == _game.HomeTeam.ID ?
             _game.VisitorTeam.ID : _game.HomeTeam.ID;
 
         _game.SelectedPlayer = null;
-        _game.AvailableMoves.Clear();
-        _game.SelectedMoves.Clear();
+        ClearGameBoardSelection();
         CurrentTeam.ResetMovement();
     }
 
@@ -391,6 +392,7 @@ public class GameEngine
                     _game.SelectedPlayer.BoardPosition.X = x;
                     _game.SelectedPlayer.BoardPosition.Y = y;
 
+                    UpdateBoardPositions();
                     ShowAllAvailableMovesOfPlayer(_game.SelectedPlayer);
                 }
                 else

@@ -59,6 +59,7 @@ public class Event
             nameof(GameDataEvent) => JsonSerializer.Deserialize<GameDataEvent>(elementJson),
             nameof(PlacePlayersEvent) => JsonSerializer.Deserialize<PlacePlayersEvent>(elementJson),
             nameof(EndTurnEvent) => JsonSerializer.Deserialize<EndTurnEvent>(elementJson),
+            nameof(MovePlayerEvent) => JsonSerializer.Deserialize<MovePlayerEvent>(elementJson),
             _ => throw new Exception($"Unsupported json type {type}")
         };
 

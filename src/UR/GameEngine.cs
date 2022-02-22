@@ -381,6 +381,12 @@ public class GameEngine
                     //Status = $"{_game.SelectedPlayer.Name} is on the run.";
                     await ExecuteEventAsync(playerMoveEvent);
                     await _eventStore.AppendEventAsync(_game.ID, playerMoveEvent);
+
+                    _game.SelectedPlayer.MovementLeft -= moves.Count;
+                    _game.SelectedPlayer.BoardPosition.X = x;
+                    _game.SelectedPlayer.BoardPosition.Y = y;
+
+                    ShowAllAvailableMovesOfPlayer(_game.SelectedPlayer);
                 }
                 else
                 {
@@ -453,48 +459,53 @@ public class GameEngine
         }
         else
         {
-            // Show all the available moves for selected player
-            ClearGameBoardSelection();
+            ShowAllAvailableMovesOfPlayer(selectedPlayer);
+        }
+        await Task.CompletedTask;
+    }
 
-            _game.SelectedPlayer = selectedPlayer;
+    private void ShowAllAvailableMovesOfPlayer(Player player)
+    {
+        // Show all the available moves for selected player
+        ClearGameBoardSelection();
 
-            var allPlayers = _game.HomeTeam.Players.ToList();
-            allPlayers.AddRange(_game.VisitorTeam.Players);
-            allPlayers.Remove(selectedPlayer);
+        _game.SelectedPlayer = player;
 
-            var playerX = selectedPlayer.BoardPosition.X;
-            var playerY = selectedPlayer.BoardPosition.Y;
+        var allPlayers = _game.HomeTeam.Players.ToList();
+        allPlayers.AddRange(_game.VisitorTeam.Players);
+        allPlayers.Remove(player);
 
-            var availableMoves = new List<BoardPosition>();
-            var availableExtraMoves = new List<BoardPosition>();
+        var playerX = player.BoardPosition.X;
+        var playerY = player.BoardPosition.Y;
 
-            var newPositions = new List<BoardPosition>();
-            var previousPositions = new List<BoardPosition>
+        var availableMoves = new List<BoardPosition>();
+        var availableExtraMoves = new List<BoardPosition>();
+
+        var newPositions = new List<BoardPosition>();
+        var previousPositions = new List<BoardPosition>
             {
                 new BoardPosition() { X = playerX, Y = playerY }
             };
 
-            var board = new int[GameBoard.BoardWidth * GameBoard.BoardHeight];
-            for (var i = 0; i < _boardPositions.Length; i++)
-            {
-                board[i] = _boardPositions[i] == Player.Empty ? 0 : 1;
-            }
-
-            for (var i = 0; i < selectedPlayer.MovementLeft + 2; i++)
-            {
-                FloodFill(true, board, previousPositions, newPositions, playerX, playerY, selectedPlayer.MovementLeft + 2 - i + 1, availableMoves, availableExtraMoves);
-                previousPositions = newPositions;
-                newPositions = new List<BoardPosition>();
-            }
-
-            _game.AvailableMoves.AddRange(availableMoves);
-
-            PlayerInformationVisibility = ElementVisibility.VisibilityNormal;
-            ActionMenuVisibility = ElementVisibility.VisibilityNoneElement;
-
-            Draw();
+        var board = new int[GameBoard.BoardWidth * GameBoard.BoardHeight];
+        for (var i = 0; i < _boardPositions.Length; i++)
+        {
+            board[i] = _boardPositions[i] == Player.Empty ? 0 : 1;
         }
-        await Task.CompletedTask;
+
+        for (var i = 0; i < player.MovementLeft + 2; i++)
+        {
+            FloodFill(true, board, previousPositions, newPositions, playerX, playerY, player.MovementLeft + 2 - i + 1, availableMoves, availableExtraMoves);
+            previousPositions = newPositions;
+            newPositions = new List<BoardPosition>();
+        }
+
+        _game.AvailableMoves.AddRange(availableMoves);
+
+        PlayerInformationVisibility = ElementVisibility.VisibilityNormal;
+        ActionMenuVisibility = ElementVisibility.VisibilityNoneElement;
+
+        Draw();
     }
 
     private void ClearGameBoardSelection()

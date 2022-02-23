@@ -1,7 +1,12 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+@font-face {
+    font-family: ur-font;
+    src: url("../fonts/irishgrover/IrishGrover-Regular.ttf");
+}
+
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: ur-font, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .welcome {

@@ -452,9 +452,10 @@ public class GameEngine
                     }
                 }
             }
-            Draw();
         }
-        else if (selectedPlayer == _game.SelectedPlayer || selectedPlayer == null)
+        else if (selectedPlayer == _game.SelectedPlayer ||
+                 selectedPlayer?.Team != _currentTeam ||
+                 selectedPlayer == null)
         {
             // Clear all selections
             ClearGameBoardSelection();
@@ -464,6 +465,9 @@ public class GameEngine
         {
             ShowAllAvailableMovesOfPlayer(selectedPlayer);
         }
+
+        Draw();
+
         await Task.CompletedTask;
     }
 
@@ -507,8 +511,6 @@ public class GameEngine
 
         PlayerInformationVisibility = ElementVisibility.VisibilityNormal;
         ActionMenuVisibility = ElementVisibility.VisibilityNoneElement;
-
-        Draw();
     }
 
     private void ClearGameBoardSelection()

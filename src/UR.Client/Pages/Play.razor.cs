@@ -24,6 +24,7 @@ public class PlayBase : ComponentBase, IDisposable
     protected static ElementReference _canvas;
 
     protected bool IsMenuOpen = false;
+    protected bool IsDiceMenuOpen = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -126,7 +127,6 @@ public class PlayBase : ComponentBase, IDisposable
         //_gameStateEngine.CanvasKeyPress(keyCode);
         //await JSRuntime2.InvokeAsync<object>("drawCanvas", _gameStateEngine.Game);
         //_debug = $"{keyCode}";
-        _stateHasChanged();
     }
 
     [JSInvokable]
@@ -151,6 +151,18 @@ public class PlayBase : ComponentBase, IDisposable
     protected async Task Menu()
     {
         IsMenuOpen = !IsMenuOpen;
+        await Task.CompletedTask;
+    }
+
+    protected async Task DiceMenu()
+    {
+        IsDiceMenuOpen = !IsDiceMenuOpen;
+        await Task.CompletedTask;
+    }
+
+    protected async Task RollDice()
+    {
+        IsDiceMenuOpen = false;
         await Task.CompletedTask;
     }
 }

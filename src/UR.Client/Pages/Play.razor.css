@@ -1,5 +1,4 @@
-﻿
-.menu-button {
+﻿.menu-button {
     z-index: 2000;
     display: block;
 }
@@ -19,6 +18,33 @@
 }
 
 .menu-Area {
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    display: table-cell;
+    color: white;
+}
+
+.dicemenu-button {
+    z-index: 4000;
+    display: block;
+}
+
+.dicemenu {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(64,64,64, 0.8);
+    backdrop-filter: blur(6px);
+    display: table;
+    vertical-align: middle;
+    text-align: center;
+    z-index: 3000;
+}
+
+.dicemenu-Area {
     position: absolute;
     top: 40%;
     width: 100%;

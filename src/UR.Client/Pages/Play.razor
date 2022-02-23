@@ -13,8 +13,26 @@
 	</div>
 
     <img src="/images/menu-close.png" @onclick="Menu" class="menu-button" />
+</div>
+}
 
-    <Dice Number="56" />
+@if(IsDiceMenuOpen)
+{
+<div class="dicemenu">
+	<div class="dicemenu-Area">
+        <img src="@_gameEngine.CurrentTeam.Logo" /> @_gameEngine.CurrentTeam.Name
+        <hr />
+        You're trying to <b>pass the ball</b><br />
+        <br />
+        You have <Dice Number="56" /> % chance to make it<br />
+        <br />
+        Do you want to roll the dice?<br />
+        <br />
+        <button class="btn btn-primary" @onclick="RollDice">Yes, roll the dice</button>
+        &nbsp;&nbsp;
+        <button class="btn btn-dark" @onclick="DiceMenu">No, skip it</button>
+	</div>
+    <img src="/images/menu-close.png" @onclick="DiceMenu" class="dicemenu-button" />
 </div>
 }
 
@@ -46,20 +64,6 @@
     <div class="dialogcontentdiv">
         <button class="btn btn-dark" @onclick="EndTurn">Go for it</button>
         <button class="btn btn-light" @onclick="EndTurn">Maybe later</button>
-    </div>
-</div>
-
-<div id="DiceRollResultVisibility" style="display:none" class="dialogdiv">
-    <div class="dialogtitlediv">
-        <text><img src="@_gameEngine.CurrentTeam.Logo" /> @_gameEngine.CurrentTeam.Name: Dice roll result</text>
-    </div>
-    <text>
-        You had <b>22 %</b> chance to make it.<br />
-		<br />
-		You rolled <b>15 %</b> 👍.
-    </text>
-    <div class="dialogcontentdiv">
-        <button class="btn btn-dark" @onclick="EndTurn">Dismiss</button>
     </div>
 </div>
 

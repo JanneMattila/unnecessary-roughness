@@ -452,7 +452,6 @@ public class GameEngine
                     }
                 }
             }
-            Draw();
         }
         else if (selectedPlayer == _game.SelectedPlayer ||
                  selectedPlayer?.Team != _currentTeam ||

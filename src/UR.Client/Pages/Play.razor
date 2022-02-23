@@ -54,18 +54,7 @@
     </div>
 </div>
 
-<div id="DiceRollVisibility" style="display:none" class="dialogdiv">
-    <div class="dialogtitlediv">
-        <text><img src="@_gameEngine.CurrentTeam.Logo" /> @_gameEngine.CurrentTeam.Name: Roll dice</text>
-    </div>
-    <text>
-        You have <b>22 %</b> chance to tackle your opponent.
-    </text>
-    <div class="dialogcontentdiv">
-        <button class="btn btn-dark" @onclick="EndTurn">Go for it</button>
-        <button class="btn btn-light" @onclick="EndTurn">Maybe later</button>
-    </div>
-</div>
+<PlayerInformation SelectedPlayer="_gameEngine.Game?.SelectedPlayer" />
 
 <div class="wrapper">
     <canvas id="canvas" class="canvas" @ref="_canvas" width="877" height="1752"></canvas>

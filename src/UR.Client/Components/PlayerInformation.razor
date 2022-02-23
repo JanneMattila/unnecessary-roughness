@@ -1,0 +1,51 @@
+﻿@inherits PlayerInformationBase
+
+<div id="PlayerInformationVisibility" style="display:none;left:600px;" class="dialogdiv">
+    <div class="dialogtitlediv">
+        <text>Player: #@SelectedPlayer?.ID: @SelectedPlayer?.Name</text>
+    </div>
+    <div class="dialogcontentdiv">
+        <table>
+            <tbody>
+                <tr>
+                    <td>Position</td>
+                    <td>@SelectedPlayer?.Position</td>
+                </tr>
+                <tr>
+                    <td>Movement</td>
+                    <td>@SelectedPlayer?.MovementLeft / @SelectedPlayer?.MovementAllowance</td>
+                </tr>
+                <tr>
+                    <td>Strength</td>
+                    <td>@SelectedPlayer?.Strength</td>
+                </tr>
+                <tr>
+                    <td>
+                        Skills
+                    </td>
+                    <td>
+                        @if (SelectedPlayer != null)
+                        {
+                            if (SelectedPlayer.Skills.Any())
+                            {
+                                @foreach (var skill in SelectedPlayer.Skills)
+                                {
+                                    <br />
+                                    @skill
+                                }
+                            }
+                            else
+                            {
+                                <br /><text>None</text>
+                            }
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+@*    <div class="dialogcontentdiv" style="display:@GameStateEngine.ActionMenuVisibility">
+        <button class="btn" @onclick="SelectToBlitz" style="display:@GameStateEngine.ActionMenuBlitzVisibility">Blitz</button>
+        <button class="btn" @onclick="SelectToThrow" style="display:@GameStateEngine.ActionMenuThrowVisibility">Pass</button>
+    </div>*@
+</div>

@@ -8,7 +8,7 @@ EXPOSE 80
 EXPOSE 443
 
 # https://hub.docker.com/_/microsoft-dotnet-sdk/
-FROM mcr.microsoft.com/dotnet/sdk:6.0.102-bullseye-slim-amd64 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0.200-bullseye-slim-amd64 AS build
 
 WORKDIR /node
 ENV NODE_VERSION 16.14.0

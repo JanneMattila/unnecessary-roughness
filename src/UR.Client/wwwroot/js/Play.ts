@@ -1,4 +1,6 @@
-﻿let _imagesLoaded = 0;
+﻿var URPlay = URPlay || {};
+
+let _imagesLoaded = 0;
 let _imagesToLoad = -1;
 const _images = {};
 
@@ -16,7 +18,7 @@ let _game: any;
 
 const _scrollElements = new Object();
 
-function loadImages() {
+const loadImages = () => {
     const theme = "basic";
     const files = [
         "goalie-blue",
@@ -43,7 +45,7 @@ function loadImages() {
 
 loadImages();
 
-function drawPlayer(context, team, player, x, y, rotation, selectedPlayerX, selectedPlayerY) {
+const drawPlayer = (context, team, player, x, y, rotation, selectedPlayerX, selectedPlayerY) => {
 
     const imageName = `${player.position}-${team.image}`;
     const image = _images[imageName];
@@ -99,7 +101,7 @@ function drawPlayer(context, team, player, x, y, rotation, selectedPlayerX, sele
     return false;
 }
 
-function showElement(id: string, modal: boolean) {
+URPlay.showElement = (id: string, modal: boolean) => {
     //console.log("showElement: " + id);
     const element = document.getElementById(id);
     //let clientX = e.clientX || e.touches[0].clientX;
@@ -122,7 +124,7 @@ function showElement(id: string, modal: boolean) {
     _scrollElements[id] = modal;
 }
 
-function scrollElement() {
+const scrollElement = () => {
     for (const id in _scrollElements) {
         const modal: boolean = _scrollElements[id];
         const element = document.getElementById(id);
@@ -134,19 +136,14 @@ function scrollElement() {
     }
 }
 
-function hideElement(id: string) {
+URPlay.hideElement =  (id: string) => {
     const element = document.getElementById(id);
     element.style.display = "none";
     delete _scrollElements[id];
 }
 
-function initializeMovableElements() {
-    const dialogs = document.getElementsByClassName("dialogdiv");
-    for (let i = 0; i < dialogs.length; i++) {
-        createMovableElement(<HTMLElement>dialogs[i]);
-    }
-
-    function createMovableElement(element: HTMLElement) {
+const initializeMovableElements = () => {
+    const createMovableElement = (element: HTMLElement) => {
         const dialogTitleElement = element.firstElementChild;
         let startX = 0, startY = 0, offsetX = 0, offsetY = 0;
 
@@ -166,7 +163,7 @@ function initializeMovableElements() {
             document.addEventListener("touchmove", elementMove, false);
         }
 
-        function elementMove(e) {
+        const elementMove = (e) => {
             e.preventDefault();
 
             const clientX = e.clientX || e.touches[0].clientX;
@@ -181,19 +178,24 @@ function initializeMovableElements() {
             element.style.left = (element.offsetLeft - offsetX) + "px";
         }
 
-        function endElementMove() {
+        const endElementMove = () => {
             document.removeEventListener("mouseup", endElementMove, false);
             document.removeEventListener("touchend", endElementMove, false);
             document.removeEventListener("mousemove", elementMove, false);
             document.removeEventListener("touchmove", elementMove, false);
         }
     }
+
+    const dialogs = document.getElementsByClassName("dialogdiv");
+    for (let i = 0; i < dialogs.length; i++) {
+        createMovableElement(<HTMLElement>dialogs[i]);
+    }
 }
 
 let _canvasElement: HTMLCanvasElement;
 let _context: CanvasRenderingContext2D;
 
-function initializeCanvas(canvasElement: HTMLCanvasElement) {
+const initializeCanvas = (canvasElement: HTMLCanvasElement) => {
     _canvasElement = canvasElement;
     _context = _canvasElement.getContext("2d");
     _context.font = "14pt Arial";
@@ -203,7 +205,7 @@ function initializeCanvas(canvasElement: HTMLCanvasElement) {
     });
 }
 
-function initializeGameview(canvasElement: HTMLCanvasElement) {
+URPlay.initializeGameview = (canvasElement: HTMLCanvasElement) => {
     initializeCanvas(canvasElement);
     initializeMovableElements();
 }
@@ -233,7 +235,7 @@ class ObjectAnimation {
     animations: AnimationMove[];
 }
 
-function update(timestamp: number) {
+const update = (timestamp: number) => {
     const delta = (timestamp - _animationUpdate) / 1000;
 
     if (_animationBall !== undefined) {
@@ -333,14 +335,14 @@ function update(timestamp: number) {
     }
 }
 
-function gameViewAnimationFrame(timestamp: number) {
+const gameViewAnimationFrame = (timestamp: number) => {
 
     if (_animationUpdate === 0) {
         _animationUpdate = timestamp;
     }
 
     update(timestamp);
-    drawCanvas(_game);
+    URPlay.drawCanvas(_game);
 
     if ((_animationPlayers !== undefined && _animationPlayers.length > 0) ||
         _animationBall !== undefined) {
@@ -353,7 +355,7 @@ function gameViewAnimationFrame(timestamp: number) {
     }
 }
 
-function animate(animationPlayers: ObjectAnimation[], animationBall: ObjectAnimation): void {
+URPlay.animate = (animationPlayers: ObjectAnimation[], animationBall: ObjectAnimation): void => {
 
     console.log("animate:");
     console.log(animationPlayers);
@@ -365,7 +367,7 @@ function animate(animationPlayers: ObjectAnimation[], animationBall: ObjectAnima
     gameViewAnimationFrame(0);
 }
 
-function drawCanvas(game: any) {
+URPlay.drawCanvas = (game: any) => {
 
     _game = game;
 
@@ -514,7 +516,7 @@ class DotNet {
     static invokeMethod: Function;
 }
 
-function calculatePosition(event: MouseEvent): void {
+const calculatePosition = (event: MouseEvent): void => {
 
     if (!_animationRunning) {
         const x = Math.floor(event.offsetX / _FLOOR_SIZE);

@@ -1,3 +1,4 @@
+var URPlay = URPlay || {};
 var _imagesLoaded = 0;
 var _imagesToLoad = -1;
 var _images = {};
@@ -10,7 +11,7 @@ var _animationPlayers;
 var _animationBall;
 var _game;
 var _scrollElements = new Object();
-function loadImages() {
+var loadImages = function () {
     var theme = "basic";
     var files = [
         "goalie-blue",
@@ -32,9 +33,9 @@ function loadImages() {
         img.src = "/images/themes/".concat(theme, "/").concat(file, ".png");
         _images[file] = img;
     }
-}
+};
 loadImages();
-function drawPlayer(context, team, player, x, y, rotation, selectedPlayerX, selectedPlayerY) {
+var drawPlayer = function (context, team, player, x, y, rotation, selectedPlayerX, selectedPlayerY) {
     var imageName = "".concat(player.position, "-").concat(team.image);
     var image = _images[imageName];
     var imageIndex = Math.floor(Math.random() * _imagesLoaded);
@@ -83,8 +84,8 @@ function drawPlayer(context, team, player, x, y, rotation, selectedPlayerX, sele
         context.restore();
     }
     return false;
-}
-function showElement(id, modal) {
+};
+URPlay.showElement = function (id, modal) {
     //console.log("showElement: " + id);
     var element = document.getElementById(id);
     //let clientX = e.clientX || e.touches[0].clientX;
@@ -102,8 +103,8 @@ function showElement(id, modal) {
     }
     element.style.top = y + "px";
     _scrollElements[id] = modal;
-}
-function scrollElement() {
+};
+var scrollElement = function () {
     for (var id in _scrollElements) {
         var modal = _scrollElements[id];
         var element = document.getElementById(id);
@@ -113,18 +114,14 @@ function scrollElement() {
         }
         element.style.top = (y) + "px";
     }
-}
-function hideElement(id) {
+};
+URPlay.hideElement = function (id) {
     var element = document.getElementById(id);
     element.style.display = "none";
     delete _scrollElements[id];
-}
-function initializeMovableElements() {
-    var dialogs = document.getElementsByClassName("dialogdiv");
-    for (var i = 0; i < dialogs.length; i++) {
-        createMovableElement(dialogs[i]);
-    }
-    function createMovableElement(element) {
+};
+var initializeMovableElements = function () {
+    var createMovableElement = function (element) {
         var dialogTitleElement = element.firstElementChild;
         var startX = 0, startY = 0, offsetX = 0, offsetY = 0;
         dialogTitleElement.addEventListener("mousedown", startElementMove, false);
@@ -138,7 +135,7 @@ function initializeMovableElements() {
             document.addEventListener("touchend", endElementMove, false);
             document.addEventListener("touchmove", elementMove, false);
         }
-        function elementMove(e) {
+        var elementMove = function (e) {
             e.preventDefault();
             var clientX = e.clientX || e.touches[0].clientX;
             var clientY = e.clientY || e.touches[0].clientY;
@@ -148,29 +145,33 @@ function initializeMovableElements() {
             startY = clientY;
             element.style.top = (element.offsetTop - offsetY) + "px";
             element.style.left = (element.offsetLeft - offsetX) + "px";
-        }
-        function endElementMove() {
+        };
+        var endElementMove = function () {
             document.removeEventListener("mouseup", endElementMove, false);
             document.removeEventListener("touchend", endElementMove, false);
             document.removeEventListener("mousemove", elementMove, false);
             document.removeEventListener("touchmove", elementMove, false);
-        }
+        };
+    };
+    var dialogs = document.getElementsByClassName("dialogdiv");
+    for (var i = 0; i < dialogs.length; i++) {
+        createMovableElement(dialogs[i]);
     }
-}
+};
 var _canvasElement;
 var _context;
-function initializeCanvas(canvasElement) {
+var initializeCanvas = function (canvasElement) {
     _canvasElement = canvasElement;
     _context = _canvasElement.getContext("2d");
     _context.font = "14pt Arial";
     _canvasElement.addEventListener("click", function (event) {
         calculatePosition(event);
     });
-}
-function initializeGameview(canvasElement) {
+};
+URPlay.initializeGameview = function (canvasElement) {
     initializeCanvas(canvasElement);
     initializeMovableElements();
-}
+};
 var BoardPosition = /** @class */ (function () {
     function BoardPosition() {
     }
@@ -186,7 +187,7 @@ var ObjectAnimation = /** @class */ (function () {
     }
     return ObjectAnimation;
 }());
-function update(timestamp) {
+var update = function (timestamp) {
     var delta = (timestamp - _animationUpdate) / 1000;
     if (_animationBall !== undefined) {
         if (_animationBall.startTime > 0) {
@@ -269,13 +270,13 @@ function update(timestamp) {
             _animationPlayers = undefined;
         }
     }
-}
-function gameViewAnimationFrame(timestamp) {
+};
+var gameViewAnimationFrame = function (timestamp) {
     if (_animationUpdate === 0) {
         _animationUpdate = timestamp;
     }
     update(timestamp);
-    drawCanvas(_game);
+    URPlay.drawCanvas(_game);
     if ((_animationPlayers !== undefined && _animationPlayers.length > 0) ||
         _animationBall !== undefined) {
         window.requestAnimationFrame(gameViewAnimationFrame);
@@ -285,8 +286,8 @@ function gameViewAnimationFrame(timestamp) {
         console.log("AnimationEnded");
         DotNet.invokeMethod("UR.Client", "AnimationEnded");
     }
-}
-function animate(animationPlayers, animationBall) {
+};
+URPlay.animate = function (animationPlayers, animationBall) {
     console.log("animate:");
     console.log(animationPlayers);
     console.log(animationBall);
@@ -294,8 +295,8 @@ function animate(animationPlayers, animationBall) {
     _animationPlayers = animationPlayers;
     _animationBall = animationBall;
     gameViewAnimationFrame(0);
-}
-function drawCanvas(game) {
+};
+URPlay.drawCanvas = function (game) {
     _game = game;
     console.log("drawCanvas:");
     console.log(_game);
@@ -421,13 +422,13 @@ function drawCanvas(game) {
         }
     }
     _context.restore();
-}
+};
 var DotNet = /** @class */ (function () {
     function DotNet() {
     }
     return DotNet;
 }());
-function calculatePosition(event) {
+var calculatePosition = function (event) {
     if (!_animationRunning) {
         var x = Math.floor(event.offsetX / _FLOOR_SIZE);
         var y = Math.floor(event.offsetY / _FLOOR_SIZE);
@@ -435,7 +436,7 @@ function calculatePosition(event) {
         console.log(_game);
         DotNet.invokeMethod("UR.Client", "CanvasClickReceived", x, y);
     }
-}
+};
 document.addEventListener("keydown", function (event) {
     if (event.keyCode !== 123 /* F12 */) {
         event.preventDefault();

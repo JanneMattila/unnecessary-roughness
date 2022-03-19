@@ -280,6 +280,7 @@ public class GameEngine
 
     public async Task EndTurn()
     {
+        PlayerInformationVisibility = false;
         var endTurnEvent = new EndTurnEvent()
         {
             ID = Guid.NewGuid(),

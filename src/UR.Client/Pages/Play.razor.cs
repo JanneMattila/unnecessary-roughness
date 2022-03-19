@@ -50,24 +50,24 @@ public class PlayBase : ComponentBase, IDisposable
             {
                 ExecuteAnimations = (playerAnimations, ballAnimation) =>
                 {
-                    JSRuntime?.InvokeAsync<object>("animate", playerAnimations, ballAnimation);
+                    JSRuntime?.InvokeAsync<object>("URPlay.animate", playerAnimations, ballAnimation);
                 },
 
                 ExecuteDraw = (game) =>
                 {
-                    JSRuntime?.InvokeAsync<object>("drawCanvas", game);
+                    JSRuntime?.InvokeAsync<object>("URPlay.drawCanvas", game);
                     _stateHasChanged();
                 },
 
                 ShowElement = (id, modal) =>
                 {
-                    JSRuntime?.InvokeAsync<object>("showElement", id, modal);
+                    JSRuntime?.InvokeAsync<object>("URPlay.showElement", id, modal);
                     _stateHasChanged();
                 },
 
                 HideElement = (id) =>
                 {
-                    JSRuntime?.InvokeAsync<object>("hideElement", id);
+                    JSRuntime?.InvokeAsync<object>("URPlay.hideElement", id);
                     _stateHasChanged();
                 }
             };
@@ -83,8 +83,8 @@ public class PlayBase : ComponentBase, IDisposable
             _loaded = true;
             await _gameEngine.LoadGameEventsAsync();
 
-            await JSRuntime.InvokeAsync<object>("initializeGameview", _canvas);
-            await JSRuntime.InvokeAsync<object>("drawCanvas", _gameEngine.Game);
+            await JSRuntime.InvokeAsync<object>("URPlay.initializeGameview", _canvas);
+            await JSRuntime.InvokeAsync<object>("URPlay.drawCanvas", _gameEngine.Game);
 
             _stateHasChanged();
         }

@@ -11,7 +11,9 @@
 		"recommendations": [
 			"ms-azuretools.vscode-azurelogicapps",
 			"humao.rest-client",
-			"ms-vscode.powershell"
+			"ms-vscode.powershell",
+			"takumii.markdowntable",
+			"hediet.vscode-drawio"
 		]
 	}
 }
